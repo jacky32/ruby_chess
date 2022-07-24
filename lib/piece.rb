@@ -2,13 +2,16 @@
 
 # class for the general piece logic
 class Piece
-  attr_accessor(:piece_color)
+  attr_accessor(:piece_color, :piece_moves)
 
   def initialize(piece_color)
     @piece_color = piece_color
+    @piece_moves = []
   end
 
-  def move() end
+  def move(second_coordinate)
+    
+  end
 
   def assign_visual(type)
     @visual = if @piece_color == 'black'

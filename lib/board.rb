@@ -4,13 +4,13 @@ require_relative 'board_piece'
 
 # class for the game environment
 class Board
+  attr_accessor(:board)
+
   def generate
     @board = Array.new(10) { |id_x| Array.new(10) { |id_y| BoardPiece.new(id_x, id_y) } }
     fill_with_pieces
     show_board
   end
-
-  private
 
   def show_board
     @board.each_with_index do |row, id_y|
@@ -22,6 +22,8 @@ class Board
       puts
     end
   end
+
+  private
 
   def print_helper_letters(id_x)
     # print empty corners

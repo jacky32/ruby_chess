@@ -9,23 +9,36 @@ class Game
 
   def initialize
     start
-    process_input
   end
 
   def start
     @board = Board.new
-    puts "Start a new game or load from save? (type \e[35mstart\e[0m or \e[35mload\e[0m)"
-    decision = gets.chomp
-    return load if decision == 'load'
+    # puts "Start a new game or load from save? (type \e[35mstart\e[0m or \e[35mload\e[0m)"
+    # decision = gets.chomp
+    # return load if decision == 'load'
 
-    choose_players
-
+    # choose_players
     @board.generate
+    game_loop
   end
 
   def save() end
 
   def load() end
+
+  def game_loop
+    loop do
+      # puts "\e[97m#{@white_player.name}'s\e[0m turn!"
+      process_input('white')
+      break if conditions_met?
+
+      # puts "\e[30m#{@black_player.name}'s\e[0m turn!"
+      process_input('black')
+      break if conditions_met?
+    end
+  end
+
+  def conditions_met?() end
 
   def choose_players
     @white_player = Player.new(name_loop('white'), 'white')
@@ -51,13 +64,34 @@ class Game
     true
   end
 
-  def process_input
+  def process_input(color)
     input = gets.chomp
     return save if input == 'save'
 
     input_array = input.split(' ')
-    return invalid_input unless check_input_format(input_array) && check_input_coordinates(input_array)
+    first_coordinate = input_array[0].split('')
+    second_coordinate = input_array[1].split('')
+    return invalid_input unless check_input_format(input_array) && check_input_coordinates(first_coordinate, second_coordinate)
 
+    check_input_move(first_coordinate, second_coordinate)
+    @board.show_board
+  end
+
+  def check_input_move(first_coordinate, second_coordinate)
+    # check piece if valid move
+
+    letters_in_numbers = {}
+    ('a'..'h').each_with_index { |letter, number| letters_in_numbers[letter] = number + 1}
+    id_x1 = letters_in_numbers[first_coordinate[0]]
+    id_y1 = 9 - first_coordinate[1].to_i
+    id_x2 = letters_in_numbers[second_coordinate[0]]
+    id_y2 = 9 - second_coordinate[1].to_i 
+    puts [id_y1, id_x1, id_y2, id_x2, @board.board[id_y1][id_x1].content, @board.board[id_y1][id_x1].content.piece_color]
+    if @board.board[id_y1][id_x1].content.valid_move?(id_y1, id_x1, id_y2, id_x2, @board)
+      @board.board[id_y1][id_x1].content.piece_moves << [first_coordinate, second_coordinate]
+      @board.board[id_y2][id_x2].content = @board.board[id_y1][id_x1].content
+      @board.board[id_y1][id_x1].remove_piece
+    end
 
   end
 
@@ -70,10 +104,8 @@ class Game
     true
   end
 
-  def check_input_coordinates(input_array)
+  def check_input_coordinates(first_coordinate, second_coordinate)
     # checks whether each element part is a valid position
-    first_coordinate = input_array[0].split('')
-    second_coordinate = input_array[1].split('')
     return false unless ('a'..'h').to_a.include?(first_coordinate[0].downcase && second_coordinate[0].downcase)
     return false unless (1..8).to_a.include?(first_coordinate[1].to_i && second_coordinate[1].to_i)
 

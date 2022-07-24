@@ -15,6 +15,7 @@ class BoardPiece
   def initialize(id_x, id_y)
     @id_x = id_x
     @id_y = id_y
+    @content = nil
     assign_color
   end
 
@@ -27,6 +28,14 @@ class BoardPiece
                when 'queen' then Queen.new(piece_color)
                when 'king' then King.new(piece_color)
                end
+  end
+
+  def remove_piece
+    @content = nil
+  end
+
+  def empty?
+    @content.nil?
   end
 
   private
