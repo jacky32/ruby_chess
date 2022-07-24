@@ -13,31 +13,27 @@ class Board
   private
 
   def show_board
-    @board.each_with_index do |row, y|
-      row.each_with_index do |tile, x|
-        if [0, 9].include?(y)
-          print_helper_letters(row, y, tile, x)
-        elsif [0, 9].include?(x)
-          print_helper_numbers(row, y, tile, x)
-        else
-          print_colors(tile)
-        end
+    @board.each_with_index do |row, id_y|
+      row.each_with_index do |tile, id_x|
+        print_helper_letters(id_x) if [0, 9].include?(id_y)
+        print_helper_numbers(id_y) if [0, 9].include?(id_x)
+        print_colors(tile) unless [0, 9].include?(id_y) || [0, 9].include?(id_x)
       end
       puts
     end
   end
 
-  def print_helper_letters(row, y, tile, x)
+  def print_helper_letters(id_x)
     # print empty corners
-    print '   ' if [0, 9].include?(x)
+    print '   ' if [0, 9].include?(id_x)
     # print letters
     letters_in_numbers = {}
     ('a'..'h').each_with_index { |letter, number| letters_in_numbers[number + 1] = letter }
-    print " #{letters_in_numbers[x]} " if (1..8).to_a.include?(x)
+    print " #{letters_in_numbers[id_x]} " if (1..8).to_a.include?(id_x)
   end
 
-  def print_helper_numbers(row, y, tile, x)
-    print " #{9 - y} " if (1..8).to_a.include?(y)
+  def print_helper_numbers(id_y)
+    print " #{9 - id_y} " if (1..8).to_a.include?(id_y)
   end
 
   def print_colors(tile)
