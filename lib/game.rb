@@ -1,10 +1,11 @@
 # frozen_string_literal: false
 
 require_relative 'board'
+require_relative 'player'
 
 # main class for the game
 class Game
-  attr_accessor(:board)
+  attr_accessor(:board, :white_player, :black_player)
 
   def initialize
     start
@@ -17,12 +18,38 @@ class Game
     decision = gets.chomp
     return load if decision == 'load'
 
+    choose_players
+
     @board.generate
   end
 
   def save() end
 
   def load() end
+
+  def choose_players
+    @white_player = Player.new(name_loop('white'), 'white')
+    @black_player = Player.new(name_loop('black'), 'black')
+  end
+
+  def name_loop(color)
+    puts "Choose name for the #{color} player"
+    name = gets.chomp
+    loop do
+      name_valid = check_name_validity(name)
+      break if name_valid == true
+
+      puts name_valid
+      name = gets.chomp
+    end
+    name
+  end
+
+  def check_name_validity(name)
+    return 'Too long, try again' if name.size > 12
+
+    true
+  end
 
   def process_input
     input = gets.chomp
