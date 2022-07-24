@@ -1,19 +1,13 @@
 # frozen_string_literal: false
 
+require_relative '../piece'
+
 # class for the pawn pieces
-class Pawn
+class Pawn < Piece
   attr_reader(:piece_color, :visual)
 
   def initialize(piece_color)
-    @piece_color = piece_color
-    assign_visual
-  end
-
-  def assign_visual
-    @visual = if @piece_color == 'black'
-                "\e[30m \u265F \e[0m"
-              else
-                "\e[97m \u265F \e[0m"
-              end
+    super
+    assign_visual("\u265F")
   end
 end
