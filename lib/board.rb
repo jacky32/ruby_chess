@@ -75,6 +75,3 @@ class Board
     @board[7][4].generate_piece('king', 'white')
   end
 end
-
-test = Board.new
-test.generate
