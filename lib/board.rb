@@ -5,7 +5,7 @@ require_relative 'board_piece'
 # class for the game environment
 class Board
   def generate
-    @board = Array.new(8) { |id_y| Array.new(8) { |id_x| BoardPiece.new(id_x, id_y) } }
+    @board = Array.new(10) { |id_x| Array.new(10) { |id_y| BoardPiece.new(id_x, id_y) } }
     fill_with_pieces
     show_board
   end
@@ -13,15 +13,38 @@ class Board
   private
 
   def show_board
-    @board.each do |row|
-      row.each do |tile|
-        if tile.color == 'black'
-          print "\e[48;5;243m#{defined?(tile.content.visual) ? tile.content.visual : '   '}\e[0m"
+    @board.each_with_index do |row, y|
+      row.each_with_index do |tile, x|
+        if [0, 9].include?(y)
+          print_helper_letters(row, y, tile, x)
+        elsif [0, 9].include?(x)
+          print_helper_numbers(row, y, tile, x)
         else
-          print "\e[48;5;249m#{defined?(tile.content.visual) ? tile.content.visual : '   '}\e[0m"
+          print_colors(tile)
         end
       end
       puts
+    end
+  end
+
+  def print_helper_letters(row, y, tile, x)
+    # print empty corners
+    print '   ' if [0, 9].include?(x)
+    # print letters
+    letters_in_numbers = {}
+    ('a'..'h').each_with_index { |letter, number| letters_in_numbers[number + 1] = letter }
+    print " #{letters_in_numbers[x]} " if (1..8).to_a.include?(x)
+  end
+
+  def print_helper_numbers(row, y, tile, x)
+    print " #{9 - y} " if (1..8).to_a.include?(y)
+  end
+
+  def print_colors(tile)
+    if tile.color == 'black'
+      print "\e[48;5;243m#{defined?(tile.content.visual) ? tile.content.visual : '   '}\e[0m"
+    else
+      print "\e[48;5;249m#{defined?(tile.content.visual) ? tile.content.visual : '   '}\e[0m"
     end
   end
 
@@ -35,43 +58,43 @@ class Board
   end
 
   def fill_pawns
-    @board[1].each do |tile|
-      tile.generate_piece('pawn', 'black')
+    @board[2].each do |tile|
+      tile.generate_piece('pawn', 'black') unless tile.id_y.zero? || tile.id_y == 9
     end
 
-    @board[6].each do |tile|
-      tile.generate_piece('pawn', 'white')
+    @board[7].each do |tile|
+      tile.generate_piece('pawn', 'white') unless tile.id_y.zero? || tile.id_y == 9
     end
   end
 
   def fill_rooks
-    @board[0][0].generate_piece('rook', 'black')
-    @board[0][7].generate_piece('rook', 'black')
-    @board[7][0].generate_piece('rook', 'white')
-    @board[7][7].generate_piece('rook', 'white')
+    @board[1][1].generate_piece('rook', 'black')
+    @board[1][8].generate_piece('rook', 'black')
+    @board[8][1].generate_piece('rook', 'white')
+    @board[8][8].generate_piece('rook', 'white')
   end
 
   def fill_bishops
-    @board[0][2].generate_piece('bishop', 'black')
-    @board[0][5].generate_piece('bishop', 'black')
-    @board[7][2].generate_piece('bishop', 'white')
-    @board[7][5].generate_piece('bishop', 'white')
+    @board[1][3].generate_piece('bishop', 'black')
+    @board[1][6].generate_piece('bishop', 'black')
+    @board[8][3].generate_piece('bishop', 'white')
+    @board[8][6].generate_piece('bishop', 'white')
   end
 
   def fill_knights
-    @board[0][1].generate_piece('knight', 'black')
-    @board[0][6].generate_piece('knight', 'black')
-    @board[7][1].generate_piece('knight', 'white')
-    @board[7][6].generate_piece('knight', 'white')
+    @board[1][2].generate_piece('knight', 'black')
+    @board[1][7].generate_piece('knight', 'black')
+    @board[8][2].generate_piece('knight', 'white')
+    @board[8][7].generate_piece('knight', 'white')
   end
 
   def fill_queens
-    @board[0][3].generate_piece('queen', 'black')
-    @board[7][3].generate_piece('queen', 'white')
+    @board[1][4].generate_piece('queen', 'black')
+    @board[8][4].generate_piece('queen', 'white')
   end
 
   def fill_kings
-    @board[0][4].generate_piece('king', 'black')
-    @board[7][4].generate_piece('king', 'white')
+    @board[1][5].generate_piece('king', 'black')
+    @board[8][5].generate_piece('king', 'white')
   end
 end
