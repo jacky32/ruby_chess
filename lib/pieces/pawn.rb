@@ -15,25 +15,24 @@ class Pawn < Piece
     # TODO: check whether enemy piece is there
     return false if id_x1 != id_x2
 
-    # white
-    if @piece_color == 'white'
-      if id_y1 - id_y2 == 2
-        #TODO: check whether enemy piece is there
-        return false unless @piece_moves.empty?
-        return false if enemy_in_way?(id_y2, id_x2, board)
-        true
-      elsif id_y1 - id_y2 == 1
-        #TODO: check whether enemy piece is there
-        return false if enemy_in_way?(id_y2, id_x2, board)
-        true
-      else
-        false
-      end
-    # black
-    else
+    return valid_forward_two?(id_y2, id_x2, board) if id_y1 - id_y2 == 2 || id_y2 - id_y1 == 2
+    return valid_forward_one?(id_y2, id_x2, board) if id_y1 - id_y2 == 1 || id_y2 - id_y1 == 1
 
-    
-    end
+    false
   end
 
+  # move one tile forward
+  def valid_forward_one?(id_y2, id_x2, board)
+    return false if enemy_in_way?(id_y2, id_x2, board)
+
+    true
+  end
+
+  # move two tiles forward if haven't moved yet
+  def valid_forward_two?(id_y2, id_x2, board)
+    return false unless @piece_moves.empty?
+    return false if enemy_in_way?(id_y2, id_x2, board)
+
+    true
+  end
 end
