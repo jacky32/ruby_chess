@@ -36,7 +36,4 @@ class Pawn < Piece
     end
   end
 
-  def enemy_in_way?(id_y2, id_x2, board)
-    board.board[id_y2][id_x2].empty? ? false : true
-  end
 end

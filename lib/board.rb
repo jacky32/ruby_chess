@@ -1,10 +1,13 @@
 # frozen_string_literal: false
 
 require_relative 'board_piece'
+require_relative 'translate'
 
 # class for the game environment
 class Board
   attr_accessor(:board)
+
+  include Translate
 
   def generate
     @board = Array.new(10) { |id_x| Array.new(10) { |id_y| BoardPiece.new(id_x, id_y) } }
@@ -29,9 +32,7 @@ class Board
     # print empty corners
     print '   ' if [0, 9].include?(id_x)
     # print letters
-    letters_in_numbers = {}
-    ('a'..'h').each_with_index { |letter, number| letters_in_numbers[number + 1] = letter }
-    print " #{letters_in_numbers[id_x]} " if (1..8).to_a.include?(id_x)
+    print " #{translate_number_to_letter(id_x)} " if (1..8).to_a.include?(id_x)
   end
 
   def print_helper_numbers(id_y)

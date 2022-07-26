@@ -2,10 +2,13 @@
 
 require_relative 'board'
 require_relative 'player'
+require_relative 'translate'
 
 # main class for the game
 class Game
   attr_accessor(:board, :white_player, :black_player)
+
+  include Translate
 
   def initialize
     start
@@ -80,19 +83,13 @@ class Game
   def check_input_move(first_coordinate, second_coordinate)
     # check piece if valid move
 
-    letters_in_numbers = {}
-    ('a'..'h').each_with_index { |letter, number| letters_in_numbers[letter] = number + 1}
-    id_x1 = letters_in_numbers[first_coordinate[0]]
+    id_x1 = translate_letter_to_number(first_coordinate[0])
     id_y1 = 9 - first_coordinate[1].to_i
-    id_x2 = letters_in_numbers[second_coordinate[0]]
-    id_y2 = 9 - second_coordinate[1].to_i 
-    puts [id_y1, id_x1, id_y2, id_x2, @board.board[id_y1][id_x1].content, @board.board[id_y1][id_x1].content.piece_color]
-    if @board.board[id_y1][id_x1].content.valid_move?(id_y1, id_x1, id_y2, id_x2, @board)
-      @board.board[id_y1][id_x1].content.piece_moves << [first_coordinate, second_coordinate]
-      @board.board[id_y2][id_x2].content = @board.board[id_y1][id_x1].content
-      @board.board[id_y1][id_x1].remove_piece
-    end
+    id_x2 = translate_letter_to_number(second_coordinate[0])
+    id_y2 = 9 - second_coordinate[1].to_i
+    first_piece = @board.board[id_y1][id_x1].content
 
+    first_piece.move(id_y1, id_x1, id_y2, id_x2, @board) if first_piece.valid_move?(id_y1, id_x1, id_y2, id_x2, @board)
   end
 
   def check_input_format(input_array)
