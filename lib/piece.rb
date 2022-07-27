@@ -4,13 +4,14 @@ require_relative 'translate'
 
 # class for the general piece logic
 class Piece
-  attr_accessor(:piece_color, :piece_moves)
+  attr_accessor(:piece_color, :piece_moves, :type)
 
   include Translate
 
-  def initialize(piece_color)
+  def initialize(piece_color, type)
     @piece_color = piece_color
     @piece_moves = []
+    @type = type
   end
 
   def move(start_coordinate, end_coordinate)
@@ -31,7 +32,7 @@ class Piece
   end
 
   def add_to_graveyard(piece, board)
-    board.graveyard << piece
+    board.graveyard << [piece.type, piece.piece_color]
   end
 
   def assign_visual(type)
@@ -63,6 +64,7 @@ class Piece
     # checks whether coordinates are the same'
     return false unless different_coordinates?(start_coordinate, end_coordinate)
     return false if enemy_in_way?(end_coordinate)
+    return false if friendly_in_way?(end_coordinate)
 
     true
   end
@@ -73,6 +75,12 @@ class Piece
     return true if end_x == start_x + 1 || end_x == start_x - 1
 
     false
+  end
+
+  def friendly_in_way?(coordinate)
+    return false if coordinate['value'].nil?
+    
+    true
   end
 
   def enemy_in_way?(coordinate)

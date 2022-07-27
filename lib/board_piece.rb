@@ -21,12 +21,12 @@ class BoardPiece
 
   def generate_piece(piece, piece_color)
     @content = case piece
-               when 'pawn' then Pawn.new(piece_color)
-               when 'knight' then Knight.new(piece_color)
-               when 'rook' then Rook.new(piece_color)
-               when 'bishop' then Bishop.new(piece_color)
-               when 'queen' then Queen.new(piece_color)
-               when 'king' then King.new(piece_color)
+               when 'pawn' then Pawn.new(piece_color, piece)
+               when 'knight' then Knight.new(piece_color, piece)
+               when 'rook' then Rook.new(piece_color, piece)
+               when 'bishop' then Bishop.new(piece_color, piece)
+               when 'queen' then Queen.new(piece_color, piece)
+               when 'king' then King.new(piece_color, piece)
                end
   end
 

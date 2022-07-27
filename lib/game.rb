@@ -84,9 +84,16 @@ class Game
   end
 
   def check_single_word_input(input, color)
-    return save if input == 'save'
+    case input
+    when 'save' then save
+    when 'graveyard' then graveyard
+    else
+      invalid_input(color)
+    end
+  end
 
-    invalid_input(color)
+  def graveyard
+    @board.graveyard.each_with_index { |dead, index| puts "#{index + 1}. #{dead[1]} #{dead[0]}" }
   end
 
   def check_input_move(start_coordinate, end_coordinate, color)

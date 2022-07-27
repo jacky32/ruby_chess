@@ -4,15 +4,16 @@ require_relative '../piece'
 
 # class for the knight pieces
 class Knight < Piece
-  attr_reader(:piece_color, :visual)
-
-  def initialize(piece_color)
+  attr_reader(:piece_color, :visual, :piece_moves, :type)
+  
+  def initialize(piece_color, type)
     super
     assign_visual("\u265E")
   end
 
   def valid_move?(start_coordinate, end_coordinate)
     return false unless preliminary_move_checks_passed?(start_coordinate, end_coordinate)
+
     # return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
 
     start_y = start_coordinate['id_y']
@@ -39,10 +40,9 @@ class Knight < Piece
     false
   end
 
-  def secondary_move_checks_passed?(start_coordinate, end_coordinate) end
+  # def secondary_move_checks_passed?(start_coordinate, end_coordinate) end
 
   def valid_take?(start_coordinate, end_coordinate)
-
     start_y = start_coordinate['id_y']
     start_x = start_coordinate['id_x']
     end_y = end_coordinate['id_y']

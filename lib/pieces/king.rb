@@ -4,9 +4,9 @@ require_relative '../piece'
 
 # class for the king pieces
 class King < Piece
-  attr_reader(:piece_color, :visual)
-
-  def initialize(piece_color)
+  attr_reader(:piece_color, :visual, :piece_moves, :type)
+  
+  def initialize(piece_color, type)
     super
     assign_visual("\u265A")
   end
