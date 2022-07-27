@@ -57,6 +57,16 @@ class Piece
     true
   end
 
+  def preliminary_move_checks_passed?(start_coordinate, end_coordinate)
+    # checks whether the board doesn't end
+    return false unless within_board_boundaries?(end_coordinate)
+    # checks whether coordinates are the same'
+    return false unless different_coordinates?(start_coordinate, end_coordinate)
+    return false if enemy_in_way?(end_coordinate)
+
+    true
+  end
+
   def in_neighbouring_column?(start_coordinate, end_coordinate)
     start_x = start_coordinate['id_x']
     end_x = end_coordinate['id_x']
