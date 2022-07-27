@@ -33,10 +33,12 @@ class Game
     loop do
       # puts "\e[97m#{@white_player.name}'s\e[0m turn!"
       process_input('white')
+      @board.show_board
       break if conditions_met?
 
       # puts "\e[30m#{@black_player.name}'s\e[0m turn!"
       process_input('black')
+      @board.show_board
       break if conditions_met?
     end
   end
@@ -69,29 +71,33 @@ class Game
 
   def process_input(color)
     input = gets.chomp
-    return save if input == 'save'
+    return check_single_word_input(input, color) unless input.include?(' ')
 
     input_array = input.split(' ')
-    first_coordinate = input_array[0].split('')
-    second_coordinate = input_array[1].split('')
-    return invalid_input unless check_input_format(input_array) && check_input_coordinates(first_coordinate, second_coordinate)
+    return invalid_input(color) unless check_input_format(input_array)
 
-    check_input_move(first_coordinate, second_coordinate)
-    @board.show_board
+    start_coordinate = coordinate_to_hash(input_array[0].split(''))
+    end_coordinate = coordinate_to_hash(input_array[1].split(''))
+    return invalid_input(color) unless check_input_coordinates(start_coordinate, end_coordinate)
+
+    check_input_move(start_coordinate, end_coordinate, color)
   end
 
-  def check_input_move(first_coordinate, second_coordinate)
-    # check piece if valid move
+  def check_single_word_input(input, color)
+    return save if input == 'save'
 
-    id_x1 = translate_letter_to_number(first_coordinate[0])
-    id_y1 = 9 - first_coordinate[1].to_i
-    id_x2 = translate_letter_to_number(second_coordinate[0])
-    id_y2 = 9 - second_coordinate[1].to_i
-    first_piece = @board.board[id_y1][id_x1].content
-    if first_piece.valid_move?(id_y1, id_x1, id_y2, id_x2, @board)
-      first_piece.move(id_y1, id_x1, id_y2, id_x2, @board)
-    elsif first_piece.valid_take?(id_y1, id_x1, id_y2, id_x2, @board)
-      first_piece.take(id_y1, id_x1, id_y2, id_x2, @board)
+    invalid_input(color)
+  end
+
+  def check_input_move(start_coordinate, end_coordinate, color)
+    start_piece = start_coordinate['value']
+
+    return invalid_input(color) if start_piece.nil?
+
+    if start_piece.valid_move?(start_coordinate, end_coordinate)
+      start_piece.move(start_coordinate, end_coordinate)
+    elsif start_piece.valid_take?(start_coordinate, end_coordinate)
+      start_piece.take(start_coordinate, end_coordinate, @board)
     else
       puts 'Invalid move'
     end
@@ -106,17 +112,17 @@ class Game
     true
   end
 
-  def check_input_coordinates(first_coordinate, second_coordinate)
+  def check_input_coordinates(start_coordinate, end_coordinate)
     # checks whether each element part is a valid position
-    return false unless ('a'..'h').to_a.include?(first_coordinate[0].downcase && second_coordinate[0].downcase)
-    return false unless (1..8).to_a.include?(first_coordinate[1].to_i && second_coordinate[1].to_i)
+    return false unless (1..8).to_a.include?(start_coordinate['id_x'] && end_coordinate['id_x'])
+    return false unless (1..8).to_a.include?(start_coordinate['id_y'] && end_coordinate['id_y'])
 
     true
   end
 
-  def invalid_input
+  def invalid_input(color)
     puts 'Invalid input, try c1 c2'
-    process_input
+    process_input(color)
   end
 end
 

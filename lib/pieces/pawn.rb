@@ -11,48 +11,48 @@ class Pawn < Piece
     assign_visual("\u265F")
   end
 
-  def valid_move?(id_y1, id_x1, id_y2, id_x2, board)
-    return false unless preliminary_checks_passed?(id_y1, id_x1, id_y2, id_x2)
+  def valid_move?(start_coordinate, end_coordinate)
+    return false unless preliminary_checks_passed?(start_coordinate, end_coordinate)
 
     if @piece_color == 'white'
-      return valid_forward_two?(id_y2, id_x2, board) if id_y1 - id_y2 == 2
-      return valid_forward_one?(id_y2, id_x2, board) if id_y1 - id_y2 == 1
+      return valid_forward_two?(end_coordinate) if start_coordinate['id_y'] - end_coordinate['id_y'] == 2
+      return valid_forward_one?(end_coordinate) if start_coordinate['id_y'] - end_coordinate['id_y'] == 1
     else
-      return valid_forward_two?(id_y2, id_x2, board) if id_y2 - id_y1 == 2
-      return valid_forward_one?(id_y2, id_x2, board) if id_y2 - id_y1 == 1
+      return valid_forward_two?(end_coordinate) if end_coordinate['id_y'] - start_coordinate['id_y'] == 2
+      return valid_forward_one?(end_coordinate) if end_coordinate['id_y'] - start_coordinate['id_y'] == 1
     end
 
     false
   end
 
-  def preliminary_checks_passed?(id_y1, id_x1, id_y2, id_x2)
+  def preliminary_checks_passed?(start_coordinate, end_coordinate)
     # checks whether the board doesn't end
-    return false unless within_board_boundaries?(id_y2, id_x2)
+    return false unless within_board_boundaries?(end_coordinate)
     # checks whether coordinates are the same
-    return false unless different_coordinates?(id_y1, id_x1, id_y2, id_x2)
+    return false unless different_coordinates?(start_coordinate, end_coordinate)
     # checks whether in the same line
-    return false if id_x1 != id_x2
+    return false if start_coordinate['id_x'] != end_coordinate['id_x']
 
     true
   end
 
   # move one tile forward
-  def valid_forward_one?(id_y2, id_x2, board)
-    return false if enemy_in_way?(id_y2, id_x2, board)
+  def valid_forward_one?(end_coordinate)
+    return false if enemy_in_way?(end_coordinate)
 
     true
   end
 
   # move two tiles forward if haven't moved yet
-  def valid_forward_two?(id_y2, id_x2, board)
+  def valid_forward_two?(end_coordinate)
     return false unless @piece_moves.empty?
-    return false if enemy_in_way?(id_y2, id_x2, board)
+    return false if enemy_in_way?(end_coordinate)
 
     true
   end
 
-  def valid_take?(id_y1, id_x1, id_y2, id_x2, board)
-    valid_cross_take?(id_y1, id_x1, id_y2, id_x2, board)
+  def valid_take?(start_coordinate, end_coordinate)
+    valid_cross_take?(start_coordinate, end_coordinate)
   end
 
 end
