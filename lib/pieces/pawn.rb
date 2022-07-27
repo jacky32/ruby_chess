@@ -15,11 +15,8 @@ class Pawn < Piece
     return false unless preliminary_checks_passed?(start_coordinate, end_coordinate)
     return false if enemy_in_way?(end_coordinate)
 
-    start_y = start_coordinate['id_y']
-    end_y = end_coordinate['id_y']
-
-    return valid_forward_two? if start_y - end_y == 2 && @piece_color == 'white'
-    return valid_forward_two? if end_y - start_y == 2 && @piece_color == 'black'
+    return true if valid_forward_two?(start_coordinate, end_coordinate)
+    return true if valid_forward_one?(start_coordinate, end_coordinate)
 
     false
   end
@@ -35,11 +32,25 @@ class Pawn < Piece
     true
   end
 
+  def valid_forward_one?(start_coordinate, end_coordinate)
+    start_y = start_coordinate['id_y']
+    end_y = end_coordinate['id_y']
+    return true if start_y - end_y == 1 && @piece_color == 'white'
+    return true if end_y - start_y == 1 && @piece_color == 'black'
+
+    false
+  end
+
   # move two tiles forward if haven't moved yet
-  def valid_forward_two?
+  def valid_forward_two?(start_coordinate, end_coordinate)
     return false unless @piece_moves.empty?
 
-    true
+    start_y = start_coordinate['id_y']
+    end_y = end_coordinate['id_y']
+    return true if start_y - end_y == 2 && @piece_color == 'white'
+    return true if end_y - start_y == 2 && @piece_color == 'black'
+
+    false
   end
 
   def valid_take?(start_coordinate, end_coordinate)

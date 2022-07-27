@@ -13,13 +13,6 @@ class Piece
     @piece_moves = []
   end
 
-  # def move(id_y1, id_x1, id_y2, id_x2, board)
-  #   first_piece = board.board[id_y1][id_x1].content
-  #   first_piece.piece_moves << [[id_y1, translate_number_to_letter(id_x1)], [id_y2, translate_number_to_letter(id_x2)]]
-  #   board.board[id_y2][id_x2].content = first_piece
-  #   board.board[id_y1][id_x1].remove_piece
-  # end
-
   def move(start_coordinate, end_coordinate)
     end_coordinate['tile'].content = start_coordinate['value']
     start_coordinate['tile'].remove_piece
@@ -73,7 +66,10 @@ class Piece
   end
 
   def enemy_in_way?(coordinate)
-    coordinate['value'].nil? ? false : true
+    return false if coordinate['value'].nil?
+    return false if coordinate['value'].piece_color == @piece_color
+
+    true
   end
 
   def within_board_boundaries?(coordinate)
