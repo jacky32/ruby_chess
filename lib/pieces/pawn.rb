@@ -12,8 +12,8 @@ class Pawn < Piece
   end
 
   def valid_move?(start_coordinate, end_coordinate)
-    return false unless preliminary_checks_passed?(start_coordinate, end_coordinate)
-    return false if enemy_in_way?(end_coordinate)
+    return false unless preliminary_move_checks_passed?(start_coordinate, end_coordinate)
+    return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
 
     return true if valid_forward_two?(start_coordinate, end_coordinate)
     return true if valid_forward_one?(start_coordinate, end_coordinate)
@@ -21,11 +21,7 @@ class Pawn < Piece
     false
   end
 
-  def preliminary_checks_passed?(start_coordinate, end_coordinate)
-    # checks whether the board doesn't end
-    return false unless within_board_boundaries?(end_coordinate)
-    # checks whether coordinates are the same
-    return false unless different_coordinates?(start_coordinate, end_coordinate)
+  def secondary_move_checks_passed?(start_coordinate, end_coordinate)
     # checks whether in the same line
     return false if start_coordinate['id_x'] != end_coordinate['id_x']
 
