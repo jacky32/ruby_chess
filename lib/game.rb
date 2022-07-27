@@ -88,8 +88,13 @@ class Game
     id_x2 = translate_letter_to_number(second_coordinate[0])
     id_y2 = 9 - second_coordinate[1].to_i
     first_piece = @board.board[id_y1][id_x1].content
-
-    first_piece.move(id_y1, id_x1, id_y2, id_x2, @board) if first_piece.valid_move?(id_y1, id_x1, id_y2, id_x2, @board)
+    if first_piece.valid_move?(id_y1, id_x1, id_y2, id_x2, @board)
+      first_piece.move(id_y1, id_x1, id_y2, id_x2, @board)
+    elsif first_piece.valid_take?(id_y1, id_x1, id_y2, id_x2, @board)
+      first_piece.take(id_y1, id_x1, id_y2, id_x2, @board)
+    else
+      puts 'Invalid move'
+    end
   end
 
   def check_input_format(input_array)

@@ -5,7 +5,7 @@ module Translate
   def translate_letter_to_number(letter)
     letters_in_numbers = {}
     ('a'..'h').each_with_index { |lett, numb| letters_in_numbers[lett] = numb + 1 }
-    letters_in_numbers[letter]
+    letters_in_numbers[letter.downcase]
   end
 
   def translate_number_to_letter(number)

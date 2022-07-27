@@ -5,9 +5,13 @@ require_relative 'translate'
 
 # class for the game environment
 class Board
-  attr_accessor(:board)
+  attr_accessor(:board, :graveyard)
 
   include Translate
+
+  def initialize
+    @graveyard = []
+  end
 
   def generate
     @board = Array.new(10) { |id_x| Array.new(10) { |id_y| BoardPiece.new(id_x, id_y) } }

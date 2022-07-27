@@ -12,13 +12,28 @@ class Pawn < Piece
   end
 
   def valid_move?(id_y1, id_x1, id_y2, id_x2, board)
-    # TODO: check whether enemy piece is there
-    return false if id_x1 != id_x2
+    return false unless preliminary_checks_passed?(id_y1, id_x1, id_y2, id_x2)
 
-    return valid_forward_two?(id_y2, id_x2, board) if id_y1 - id_y2 == 2 || id_y2 - id_y1 == 2
-    return valid_forward_one?(id_y2, id_x2, board) if id_y1 - id_y2 == 1 || id_y2 - id_y1 == 1
+    if @piece_color == 'white'
+      return valid_forward_two?(id_y2, id_x2, board) if id_y1 - id_y2 == 2
+      return valid_forward_one?(id_y2, id_x2, board) if id_y1 - id_y2 == 1
+    else
+      return valid_forward_two?(id_y2, id_x2, board) if id_y2 - id_y1 == 2
+      return valid_forward_one?(id_y2, id_x2, board) if id_y2 - id_y1 == 1
+    end
 
     false
+  end
+
+  def preliminary_checks_passed?(id_y1, id_x1, id_y2, id_x2)
+    # checks whether the board doesn't end
+    return false unless within_board_boundaries?(id_y2, id_x2)
+    # checks whether coordinates are the same
+    return false unless different_coordinates?(id_y1, id_x1, id_y2, id_x2)
+    # checks whether in the same line
+    return false if id_x1 != id_x2
+
+    true
   end
 
   # move one tile forward
@@ -35,4 +50,9 @@ class Pawn < Piece
 
     true
   end
+
+  def valid_take?(id_y1, id_x1, id_y2, id_x2, board)
+    valid_cross_take?(id_y1, id_x1, id_y2, id_x2, board)
+  end
+
 end
