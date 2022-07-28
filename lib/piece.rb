@@ -47,7 +47,7 @@ class Piece
   def valid_cross_take?(start_coordinate, end_coordinate)
     start_y = start_coordinate['id_y']
     end_y = end_coordinate['id_y']
-    return false unless enemy_in_way?(end_coordinate)
+    return false unless enemy_on_tile?(end_coordinate)
     return false unless in_neighbouring_column?(start_coordinate, end_coordinate)
 
     if @piece_color == 'white'
@@ -64,8 +64,8 @@ class Piece
     return false unless within_board_boundaries?(end_coordinate)
     # checks whether coordinates are the same'
     return false unless different_coordinates?(start_coordinate, end_coordinate)
-    return false if enemy_in_way?(end_coordinate)
-    return false if friendly_in_way?(end_coordinate)
+    return false if enemy_on_tile?(end_coordinate)
+    return false if friendly_on_tile?(end_coordinate)
 
     true
   end
@@ -78,13 +78,14 @@ class Piece
     false
   end
 
-  def friendly_in_way?(coordinate)
+  def friendly_on_tile?(coordinate)
     return false if coordinate['value'].nil?
-    
+    return false if coordinate['value'].piece_color != @piece_color
+
     true
   end
 
-  def enemy_in_way?(coordinate)
+  def enemy_on_tile?(coordinate)
     return false if coordinate['value'].nil?
     return false if coordinate['value'].piece_color == @piece_color
 
@@ -105,5 +106,9 @@ class Piece
       puts 'Invalid move! The coordinates are the same'
       false
     end
+  end
+
+  def assign_board
+    ObjectSpace.each_object(Board).to_a[0].board
   end
 end

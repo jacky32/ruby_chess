@@ -52,6 +52,6 @@ class Knight < Piece
       return false
     end
 
-    enemy_in_way?(end_coordinate)
+    enemy_on_tile?(end_coordinate)
   end
 end
