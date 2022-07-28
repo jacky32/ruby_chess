@@ -15,6 +15,7 @@ class Piece
   end
 
   def move(start_coordinate, end_coordinate)
+    add_to_piece_history(start_coordinate, end_coordinate)
     end_coordinate['tile'].content = start_coordinate['value']
     start_coordinate['tile'].remove_piece
   end
