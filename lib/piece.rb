@@ -1,28 +1,19 @@
 # frozen_string_literal: false
 
 require_relative 'translate'
+require_relative 'movement'
 
 # class for the general piece logic
 class Piece
   attr_accessor(:piece_color, :piece_moves, :type)
 
   include Translate
+  include Movement
 
   def initialize(piece_color, type)
     @piece_color = piece_color
     @piece_moves = []
     @type = type
-  end
-
-  def move(start_coordinate, end_coordinate)
-    add_to_piece_history(start_coordinate, end_coordinate)
-    end_coordinate['tile'].content = start_coordinate['value']
-    start_coordinate['tile'].remove_piece
-  end
-
-  def take(start_coordinate, end_coordinate, board)
-    add_to_graveyard(end_coordinate['value'], board)
-    move(start_coordinate, end_coordinate)
   end
 
   def add_to_piece_history(start_coordinate, end_coordinate)
@@ -44,38 +35,15 @@ class Piece
               end
   end
 
-  def valid_cross_take?(start_coordinate, end_coordinate)
-    start_y = start_coordinate['id_y']
-    end_y = end_coordinate['id_y']
-    return false unless enemy_on_tile?(end_coordinate)
-    return false unless in_neighbouring_column?(start_coordinate, end_coordinate)
-
-    if @piece_color == 'white'
-      return false unless end_y == start_y - 1
-    else
-      return false unless end_y == start_y + 1
-    end
-
-    true
-  end
-
   def preliminary_move_checks_passed?(start_coordinate, end_coordinate)
     # checks whether the board doesn't end
     return false unless within_board_boundaries?(end_coordinate)
-    # checks whether coordinates are the same'
+    # checks whether coordinates are the same
     return false unless different_coordinates?(start_coordinate, end_coordinate)
     return false if enemy_on_tile?(end_coordinate)
     return false if friendly_on_tile?(end_coordinate)
 
     true
-  end
-
-  def in_neighbouring_column?(start_coordinate, end_coordinate)
-    start_x = start_coordinate['id_x']
-    end_x = end_coordinate['id_x']
-    return true if end_x == start_x + 1 || end_x == start_x - 1
-
-    false
   end
 
   def friendly_on_tile?(coordinate)
