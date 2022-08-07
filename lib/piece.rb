@@ -13,6 +13,7 @@ class Piece
   def initialize(piece_color, type)
     @piece_color = piece_color
     @piece_moves = []
+    @possible_moves = []
     @type = type
   end
 

@@ -12,7 +12,7 @@ class BoardPiece
   attr_accessor(:content)
   attr_reader(:color, :id_x, :id_y)
 
-  def initialize(id_x, id_y)
+  def initialize(id_y, id_x)
     @id_x = id_x
     @id_y = id_y
     @content = nil

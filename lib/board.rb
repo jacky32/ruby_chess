@@ -10,7 +10,7 @@ class Board
   include Translate
 
   def generate
-    @board = Array.new(10) { |id_x| Array.new(10) { |id_y| BoardPiece.new(id_x, id_y) } }
+    @board = Array.new(10) { |id_x| Array.new(10) { |id_y| BoardPiece.new(id_y, id_x) } }
     @graveyard = []
     fill_with_pieces
     show_board
