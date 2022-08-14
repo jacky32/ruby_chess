@@ -19,14 +19,14 @@ class BoardPiece
     assign_color
   end
 
-  def generate_piece(piece, piece_color)
+  def generate_piece(piece, piece_color, piece_position)
     @content = case piece
-               when 'pawn' then Pawn.new(piece_color, piece)
-               when 'knight' then Knight.new(piece_color, piece)
-               when 'rook' then Rook.new(piece_color, piece)
-               when 'bishop' then Bishop.new(piece_color, piece)
-               when 'queen' then Queen.new(piece_color, piece)
-               when 'king' then King.new(piece_color, piece)
+               when 'pawn' then Pawn.new(piece_color, piece, piece_position)
+               when 'knight' then Knight.new(piece_color, piece, piece_position)
+               when 'rook' then Rook.new(piece_color, piece, piece_position)
+               when 'bishop' then Bishop.new(piece_color, piece, piece_position)
+               when 'queen' then Queen.new(piece_color, piece, piece_position)
+               when 'king' then King.new(piece_color, piece, piece_position)
                end
   end
 

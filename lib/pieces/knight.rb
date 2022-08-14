@@ -6,7 +6,7 @@ require_relative '../piece'
 class Knight < Piece
   attr_reader(:piece_color, :visual, :piece_moves, :type)
 
-  def initialize(piece_color, type)
+  def initialize(piece_color, type, piece_position)
     super
     assign_visual("\u265E")
   end

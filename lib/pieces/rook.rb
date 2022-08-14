@@ -7,7 +7,7 @@ require_relative '../translate'
 class Rook < Piece
   attr_reader(:piece_color, :visual, :piece_moves, :type)
 
-  def initialize(piece_color, type)
+  def initialize(piece_color, type, piece_position)
     super
     assign_visual("\u265C")
   end

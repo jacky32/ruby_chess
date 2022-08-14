@@ -4,9 +4,9 @@ require_relative '../piece'
 
 # class for the pawn pieces
 class Pawn < Piece
-  attr_reader(:piece_color, :visual, :piece_moves, :type, :possible_moves)
+  attr_reader(:piece_color, :visual, :piece_moves, :type, :possible_moves, :possible_takes, :id_y, :id_x)
 
-  def initialize(piece_color, type)
+  def initialize(piece_color, type, piece_position)
     super
     assign_visual("\u265F")
   end
@@ -51,10 +51,24 @@ class Pawn < Piece
     @possible_moves << board[id_y + 2][id_x] if valid_forward_two?(start_coordinate, end_coordinate)
   end
 
-  def generate_possible_takes(coordinate)
-    id_y = coordinate['id_y']
-    id_x = coordinate['id_x']
+  def generate_possible_takes(id_y = @id_y, id_x = @id_x)
     board = assign_board
+
+    if @piece_color == 'white'
+      generate_white_takes(id_y, id_x, board)
+    else
+      generate_black_takes(id_y, id_x, board)
+    end
+  end
+
+  def generate_white_takes(id_y, id_x, board)
+    @possible_takes << board[id_y - 1][id_x - 1]
+    @possible_takes << board[id_y - 1][id_x + 1]
+  end
+
+  def generate_black_takes(id_y, id_x, board)
+    @possible_takes << board[id_y + 1][id_x - 1]
+    @possible_takes << board[id_y + 1][id_x + 1]
   end
 
   def valid_forward_one?(start_coordinate, end_coordinate)

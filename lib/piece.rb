@@ -5,23 +5,19 @@ require_relative 'movement'
 
 # class for the general piece logic
 class Piece
-  attr_accessor(:piece_color, :piece_moves, :type)
+  attr_accessor(:piece_color, :piece_moves, :type, :id_y, :id_x)
 
   include Translate
   include Movement
 
-  def initialize(piece_color, type)
+  def initialize(piece_color, type, piece_position)
     @piece_color = piece_color
     @piece_moves = []
     @possible_moves = []
+    @possible_takes = []
     @type = type
-  end
-
-  def add_to_piece_history(start_coordinate, end_coordinate)
-    start_coordinate['value'].piece_moves << [
-      [start_coordinate['id_y'], translate_number_to_letter(start_coordinate['id_x'])],
-      [end_coordinate['id_y'], translate_number_to_letter(end_coordinate['id_x'])]
-    ]
+    @id_y = piece_position[0]
+    @id_x = piece_position[1]
   end
 
   def add_to_graveyard(piece, board)

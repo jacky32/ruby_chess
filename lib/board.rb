@@ -59,42 +59,42 @@ class Board
 
   def fill_pawns
     @board[2].each do |tile|
-      tile.generate_piece('pawn', 'black') unless tile.id_y.zero? || tile.id_y == 9
+      tile.generate_piece('pawn', 'black', [tile.id_y, 2]) unless tile.id_y.zero? || tile.id_y == 9
     end
 
     @board[7].each do |tile|
-      tile.generate_piece('pawn', 'white') unless tile.id_y.zero? || tile.id_y == 9
+      tile.generate_piece('pawn', 'white', [tile.id_y, 7]) unless tile.id_y.zero? || tile.id_y == 9
     end
   end
 
   def fill_rooks
-    @board[1][1].generate_piece('rook', 'black')
-    @board[1][8].generate_piece('rook', 'black')
-    @board[8][1].generate_piece('rook', 'white')
-    @board[8][8].generate_piece('rook', 'white')
+    @board[1][1].generate_piece('rook', 'black', { 'id_y': 1, 'id_x': 1 })
+    @board[8][1].generate_piece('rook', 'white', { 'id_y': 8, 'id_x': 1 })
+    @board[1][8].generate_piece('rook', 'black', { 'id_y': 1, 'id_x': 8 })
+    @board[8][8].generate_piece('rook', 'white', { 'id_y': 8, 'id_x': 8 })
   end
 
   def fill_bishops
-    @board[1][3].generate_piece('bishop', 'black')
-    @board[1][6].generate_piece('bishop', 'black')
-    @board[8][3].generate_piece('bishop', 'white')
-    @board[8][6].generate_piece('bishop', 'white')
+    @board[1][3].generate_piece('bishop', 'black', { 'id_y': 1, 'id_x': 3 })
+    @board[1][6].generate_piece('bishop', 'black', { 'id_y': 1, 'id_x': 6 })
+    @board[8][3].generate_piece('bishop', 'white', { 'id_y': 8, 'id_x': 3 })
+    @board[8][6].generate_piece('bishop', 'white', { 'id_y': 8, 'id_x': 6 })
   end
 
   def fill_knights
-    @board[1][2].generate_piece('knight', 'black')
-    @board[1][7].generate_piece('knight', 'black')
-    @board[8][2].generate_piece('knight', 'white')
-    @board[8][7].generate_piece('knight', 'white')
+    @board[1][2].generate_piece('knight', 'black', { 'id_y': 1, 'id_x': 2 })
+    @board[1][7].generate_piece('knight', 'black', { 'id_y': 1, 'id_x': 7 })
+    @board[8][2].generate_piece('knight', 'white', { 'id_y': 8, 'id_x': 2 })
+    @board[8][7].generate_piece('knight', 'white', { 'id_y': 8, 'id_x': 7 })
   end
 
   def fill_queens
-    @board[1][4].generate_piece('queen', 'black')
-    @board[8][4].generate_piece('queen', 'white')
+    @board[1][4].generate_piece('queen', 'black', { 'id_y': 1, 'id_x': 4 })
+    @board[8][4].generate_piece('queen', 'white', { 'id_y': 8, 'id_x': 4 })
   end
 
   def fill_kings
-    @board[1][5].generate_piece('king', 'black')
-    @board[8][5].generate_piece('king', 'white')
+    @board[1][5].generate_piece('king', 'black', { 'id_y': 1, 'id_x': 5 })
+    @board[8][5].generate_piece('king', 'white', { 'id_y': 8, 'id_x': 5 })
   end
 end
