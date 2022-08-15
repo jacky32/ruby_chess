@@ -58,19 +58,11 @@ class Piece
   end
 
   def within_board_boundaries?(coordinate)
-    return true if (1..8).to_a.include?(coordinate['id_y']) && (1..8).to_a.include?(coordinate['id_x'])
-
-    puts 'Invalid move! Outside of board boundaries'
-    false
+    (1..8).to_a.include?(coordinate['id_y']) && (1..8).to_a.include?(coordinate['id_x'])
   end
 
   def different_coordinates?(start_coordinate, end_coordinate)
-    if [start_coordinate['id_y'], start_coordinate['id_x']] != [end_coordinate['id_y'], end_coordinate['id_x']]
-      true
-    else
-      puts 'Invalid move! The coordinates are the same'
-      false
-    end
+    [start_coordinate['id_y'], start_coordinate['id_x']] != [end_coordinate['id_y'], end_coordinate['id_x']]
   end
 
   def assign_board

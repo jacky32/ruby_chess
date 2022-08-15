@@ -1,5 +1,6 @@
 # frozen_string_literal: false
 
+# methods for shared movement
 module Movement
   def move(start_coordinate, end_coordinate)
     add_to_piece_history(start_coordinate, end_coordinate)
