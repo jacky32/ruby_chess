@@ -59,6 +59,8 @@ class Bishop < Piece
                               end_coordinate['id_y'], end_coordinate['id_x'])
       return false
     end
+    return false unless valid_diagonal_checks(start_coordinate['id_y'], start_coordinate['id_x'],
+                                              end_coordinate['id_y'], end_coordinate['id_x'])
 
     enemy_on_tile?(end_coordinate)
   end
