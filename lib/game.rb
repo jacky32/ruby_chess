@@ -101,6 +101,7 @@ class Game
 
     return invalid_input(color) if start_piece.nil?
 
+    # TODO: move logic to pieces
     if start_piece.valid_move?(start_coordinate, end_coordinate)
       start_piece.move(start_coordinate, end_coordinate)
     elsif start_piece.valid_take?(start_coordinate, end_coordinate)

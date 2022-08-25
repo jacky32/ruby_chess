@@ -9,9 +9,12 @@ class Board
 
   include Translate
 
-  def generate
-    @board = Array.new(10) { |id_x| Array.new(10) { |id_y| BoardPiece.new(id_y, id_x) } }
+  def initialize
+    @board = Array.new(10) { |id_y| Array.new(10) { |id_x| BoardPiece.new(id_y, id_x) } }
     @graveyard = []
+  end
+
+  def generate
     fill_with_pieces
     show_board
   end
@@ -59,11 +62,11 @@ class Board
 
   def fill_pawns
     @board[2].each do |tile|
-      tile.generate_piece('pawn', 'black', [tile.id_y, 2]) unless tile.id_y.zero? || tile.id_y == 9
+      tile.generate_piece('pawn', 'black', { 'id_y': 2, 'id_x': tile.id_x }) unless tile.id_y.zero? || tile.id_y == 9
     end
 
     @board[7].each do |tile|
-      tile.generate_piece('pawn', 'white', [tile.id_y, 7]) unless tile.id_y.zero? || tile.id_y == 9
+      tile.generate_piece('pawn', 'white', { 'id_y': 2, 'id_x': tile.id_x }) unless tile.id_y.zero? || tile.id_y == 9
     end
   end
 

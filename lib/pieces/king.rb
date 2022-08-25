@@ -25,7 +25,7 @@ class King < Piece
     true
   end
 
-  def secondary_move_checks_passed?(start_coordinate, end_coordinate)
+  def secondary_move_checks_passed?(_start_coordinate, end_coordinate)
     return false if possible_check?(end_coordinate)
 
     true
@@ -35,10 +35,10 @@ class King < Piece
   def possible_check?(coordinate)
     [
       possible_pawn_check?(coordinate),
-      #possible_bishop_check?(coordinate),
-      #possible_knight_check?(coordinate),
-      #possible_queen_check?(coordinate),
-      #possible_rook_check?(coordinate)
+      possible_bishop_check?(coordinate)
+      # possible_knight_check?(coordinate),
+      # possible_queen_check?(coordinate),
+      # possible_rook_check?(coordinate)
     ].any?(true)
   end
 
@@ -47,7 +47,53 @@ class King < Piece
     pawns.any? do |pawn|
       pawn.generate_possible_takes
       takes = pawn.possible_takes
-      takes.any? { |take| take.id_y == coordinate['id_y'] && take.id_x == coordinate['id_x'] && pawn.piece_color != @piece_color }
+      takes.any? do |take|
+        take.id_y == coordinate['id_y'] && take.id_x == coordinate['id_x'] && pawn.piece_color != @piece_color
+      end
+    end
+  end
+
+  def possible_bishop_check?(coordinate)
+    bishops = ObjectSpace.each_object(Bishop).to_a
+    bishops.any? do |bishop|
+      bishop.generate_possible_takes
+      takes = bishop.possible_takes
+      takes.any? do |take|
+        take.id_y == coordinate['id_y'] && take.id_x == coordinate['id_x'] && pawn.piece_color != @piece_color
+      end
+    end
+  end
+
+  def possible_knight_check?(coordinate)
+    pawns = ObjectSpace.each_object(Knight).to_a
+    pawns.any? do |pawn|
+      pawn.generate_possible_takes
+      takes = pawn.possible_takes
+      takes.any? do |take|
+        take.id_y == coordinate['id_y'] && take.id_x == coordinate['id_x'] && pawn.piece_color != @piece_color
+      end
+    end
+  end
+
+  def possible_queen_check?(coordinate)
+    pawns = ObjectSpace.each_object(Queen).to_a
+    pawns.any? do |pawn|
+      pawn.generate_possible_takes
+      takes = pawn.possible_takes
+      takes.any? do |take|
+        take.id_y == coordinate['id_y'] && take.id_x == coordinate['id_x'] && pawn.piece_color != @piece_color
+      end
+    end
+  end
+
+  def possible_rook_check?(coordinate)
+    pawns = ObjectSpace.each_object(Rook).to_a
+    pawns.any? do |pawn|
+      pawn.generate_possible_takes
+      takes = pawn.possible_takes
+      takes.any? do |take|
+        take.id_y == coordinate['id_y'] && take.id_x == coordinate['id_x'] && pawn.piece_color != @piece_color
+      end
     end
   end
 

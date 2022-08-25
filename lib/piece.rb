@@ -16,8 +16,8 @@ class Piece
     @possible_moves = []
     @possible_takes = []
     @type = type
-    @id_y = piece_position[0]
-    @id_x = piece_position[1]
+    @id_y = piece_position[:id_y]
+    @id_x = piece_position[:id_x]
   end
 
   def add_to_graveyard(piece, board)
