@@ -28,7 +28,7 @@ class Bishop < Piece
 
     # check whether the tile id matches possible bishop route
     board_pieces.select! do |tile|
-      filter_selection(id_y, id_x, tile, true)
+      filter_selection(id_y, id_x, tile)
     end
 
     @possible_moves = board_pieces.map { |tile| assign_board[tile.id_y][tile.id_x] }
@@ -37,20 +37,18 @@ class Bishop < Piece
   def generate_possible_takes(id_y = @id_y, id_x = @id_x)
     board = assign_board
     board_pieces = ObjectSpace.each_object(BoardPiece).to_a.select do |tile|
-      filter_selection(id_y, id_x, tile, false)
+      filter_selection(id_y, id_x, tile)
     end
 
     @possible_takes = board_pieces.map { |tile| board[tile.id_y][tile.id_x] }
   end
 
-  def filter_selection(id_y, id_x, tile, move)
+  def filter_selection(id_y, id_x, tile)
     tid_y = tile.id_y
     tid_x = tile.id_x
     valid_diagonal_checks(id_y, id_x, tid_y, tid_x) &&
       within_board_boundaries?({ 'id_y' => tid_y, 'id_x' => tid_x }) &&
-      !diagonal_piece_in_way?(id_y, id_x, tid_y, tid_x) &&
-      # check whether to take an enemy piece or to move
-      (move || enemy_on_tile?({ 'value' => assign_board[tile.id_y][tile.id_x].content }))
+      !diagonal_piece_in_way?(id_y, id_x, tid_y, tid_x)
   end
 
   def secondary_move_checks_passed?(start_coordinate, end_coordinate)
@@ -69,6 +67,7 @@ class Bishop < Piece
     generate_possible_takes
     @possible_takes.any? do |take|
       take.id_y == end_coordinate['id_y'] && take.id_x == end_coordinate['id_x']
+      enemy_on_tile?({ 'value' => assign_board[tile.id_y][tile.id_x].content })
     end
   end
 end

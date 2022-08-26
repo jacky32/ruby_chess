@@ -53,7 +53,7 @@ class Pawn < Piece
 
   def generate_possible_takes(id_y = @id_y, id_x = @id_x)
     board = assign_board
-
+    @possible_takes = []
     if @piece_color == 'white'
       generate_white_takes(id_y, id_x, board)
     else
@@ -62,13 +62,13 @@ class Pawn < Piece
   end
 
   def generate_white_takes(id_y, id_x, board)
-    @possible_takes << board[id_y - 1][id_x - 1]
-    @possible_takes << board[id_y - 1][id_x + 1]
+    @possible_takes << board[id_y - 1][id_x - 1] unless id_y - 1 < 1 || id_x - 1 < 1
+    @possible_takes << board[id_y - 1][id_x + 1] unless id_y - 1 < 1 || id_x + 1 > 8
   end
 
   def generate_black_takes(id_y, id_x, board)
-    @possible_takes << board[id_y + 1][id_x - 1]
-    @possible_takes << board[id_y + 1][id_x + 1]
+    @possible_takes << board[id_y + 1][id_x - 1] unless id_y + 1 > 8 || id_x - 1 < 1
+    @possible_takes << board[id_y + 1][id_x + 1] unless id_y + 1 > 8 || id_x + 1 > 8
   end
 
   def valid_forward_one?(start_coordinate, end_coordinate)
@@ -90,6 +90,21 @@ class Pawn < Piece
     return true if end_y - start_y == 2 && @piece_color == 'black'
 
     false
+  end
+
+  def valid_cross_take?(start_coordinate, end_coordinate)
+    start_y = start_coordinate['id_y']
+    end_y = end_coordinate['id_y']
+    return false unless enemy_on_tile?(end_coordinate)
+    return false unless in_neighbouring_column?(start_coordinate, end_coordinate)
+
+    if @piece_color == 'white'
+      return false unless end_y == start_y - 1
+    else
+      return false unless end_y == start_y + 1
+    end
+
+    true
   end
 
   def valid_take?(start_coordinate, end_coordinate)

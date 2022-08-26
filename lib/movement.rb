@@ -93,21 +93,6 @@ module Movement
     distance_y == distance_x
   end
 
-  def valid_cross_take?(start_coordinate, end_coordinate)
-    start_y = start_coordinate['id_y']
-    end_y = end_coordinate['id_y']
-    return false unless enemy_on_tile?(end_coordinate)
-    return false unless in_neighbouring_column?(start_coordinate, end_coordinate)
-
-    if @piece_color == 'white'
-      return false unless end_y == start_y - 1
-    else
-      return false unless end_y == start_y + 1
-    end
-
-    true
-  end
-
   def in_neighbouring_column?(start_coordinate, end_coordinate)
     start_x = start_coordinate['id_x']
     end_x = end_coordinate['id_x']

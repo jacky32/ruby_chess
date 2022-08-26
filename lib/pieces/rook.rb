@@ -72,6 +72,8 @@ class Rook < Piece
     true
   end
 
+  def generate_possible_takes; end
+
   def valid_take?(start_coordinate, end_coordinate)
     return false if piece_in_way?(start_coordinate, end_coordinate)
 

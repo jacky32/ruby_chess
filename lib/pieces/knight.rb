@@ -40,6 +40,8 @@ class Knight < Piece
     false
   end
 
+  def generate_possible_takes; end
+
   # def secondary_move_checks_passed?(start_coordinate, end_coordinate) end
 
   def valid_take?(start_coordinate, end_coordinate)
