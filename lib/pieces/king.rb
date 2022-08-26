@@ -31,13 +31,9 @@ class King < Piece
     true
   end
 
-  # redo all moves to possible moves array, if within possible moves -> valid?
-
   def possible_check?(coordinate)
-    board_pieces = ObjectSpace.each_object(BoardPiece).to_a.map(&:content).reject do |piece|
-      piece.nil? || piece.piece_color == @piece_color
-    end
-    board_pieces.any? do |piece|
+    pieces = assign_pieces
+    pieces.any? do |piece|
       next if %w[rook queen king knight].include?(piece.type)
 
       piece.generate_possible_takes
@@ -45,6 +41,13 @@ class King < Piece
       takes.any? do |take|
         take.id_y == coordinate['id_y'] && take.id_x == coordinate['id_x']
       end
+    end
+  end
+
+  # selects pieces of opposite color that exist on the board
+  def assign_pieces
+    ObjectSpace.each_object(BoardPiece).to_a.map(&:content).reject do |piece|
+      piece.nil? || piece.piece_color == @piece_color
     end
   end
 
