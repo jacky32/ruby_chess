@@ -31,6 +31,8 @@ class Knight < Piece
 
     # generates horizontal moves
     generate_knight_moves(@id_y + 1, @id_y - 1, @id_x + 2, @id_x - 2)
+
+    @possible_takes = @possible_moves
   end
 
   alias generate_possible_moves generate_all
