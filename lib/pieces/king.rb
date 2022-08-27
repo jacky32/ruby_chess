@@ -34,7 +34,7 @@ class King < Piece
   def possible_check?(coordinate)
     pieces = assign_pieces
     pieces.any? do |piece|
-      next if %w[rook queen king knight].include?(piece.type)
+      next if %w[queen king knight].include?(piece.type)
 
       piece.generate_possible_takes
       takes = piece.possible_takes
