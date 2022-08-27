@@ -1,11 +1,10 @@
 # frozen_string_literal: false
 
 require_relative '../piece'
-require_relative '../translate'
 
 # class for the rook pieces
 class Rook < Piece
-  attr_reader(:piece_color, :visual, :piece_moves, :type)
+  attr_reader(:piece_color, :visual, :piece_moves, :type, :possible_moves, :possible_takes, :id_y, :id_x)
 
   def initialize(piece_color, type, piece_position)
     super
@@ -17,9 +16,6 @@ class Rook < Piece
     return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
 
     generate_possible_moves
-    @possible_moves.sort_by!(&:id_y)
-    print 'final, ', [end_coordinate['id_y'], end_coordinate['id_x']]
-    @possible_moves.each { |move| print 'current, ', [move.id_y, move.id_x], puts }
 
     return true if @possible_moves.include?(end_coordinate['tile'])
   end
@@ -28,7 +24,6 @@ class Rook < Piece
     true
   end
 
-  # TODO: fix generating tiles outside the border
   def generate_all
     @possible_moves = []
     @possible_takes = []
@@ -43,11 +38,13 @@ class Rook < Piece
 
   def generate_y_down
     id_y = @id_y - 1
-    board = assign_board
     loop do
-      @possible_moves << board[id_y][@id_x] if board[id_y][@id_x].empty?
-      @possible_takes << board[id_y][@id_x]
-      break unless id_y > 0 && board[id_y][@id_x].empty?
+      tile = assign_board[id_y][@id_x]
+      if move_checks_passed?(tile)
+        @possible_moves << tile
+        @possible_takes << tile
+      end
+      break unless id_y > 0 && tile.empty?
 
       id_y -= 1
     end
@@ -55,11 +52,13 @@ class Rook < Piece
 
   def generate_y_up
     id_y = @id_y + 1
-    board = assign_board
     loop do
-      @possible_moves << board[id_y][@id_x] if board[id_y][@id_x].empty?
-      @possible_takes << board[id_y][@id_x]
-      break unless id_y < 9 && board[id_y][@id_x].empty?
+      tile = assign_board[id_y][@id_x]
+      if move_checks_passed?(tile)
+        @possible_moves << tile
+        @possible_takes << tile
+      end
+      break unless id_y < 9 && tile.empty?
 
       id_y += 1
     end
@@ -67,11 +66,13 @@ class Rook < Piece
 
   def generate_x_down
     id_x = @id_x - 1
-    board = assign_board
     loop do
-      @possible_moves << board[@id_y][id_x] if board[@id_y][id_x].empty?
-      @possible_takes << board[@id_y][id_x]
-      break unless id_x > 0 && board[@id_y][id_x].empty?
+      tile = assign_board[@id_y][id_x]
+      if move_checks_passed?(tile)
+        @possible_moves << tile
+        @possible_takes << tile
+      end
+      break unless id_x > 0 && tile.empty?
 
       id_x -= 1
     end
@@ -79,14 +80,20 @@ class Rook < Piece
 
   def generate_x_up
     id_x = @id_x + 1
-    board = assign_board
     loop do
-      @possible_moves << board[@id_y][id_x] if board[@id_y][id_x].empty?
-      @possible_takes << board[@id_y][id_x]
-      break unless id_x < 9 && board[@id_y][id_x].empty?
+      tile = assign_board[@id_y][id_x]
+      if move_checks_passed?(tile)
+        @possible_moves << tile
+        @possible_takes << tile
+      end
+      break unless id_x < 9 && tile.empty?
 
       id_x += 1
     end
+  end
+
+  def move_checks_passed?(tile)
+    within_board_boundaries?({ 'id_y' => tile.id_y, 'id_x' => tile.id_x })
   end
 
   def valid_take?(_start_coordinate, end_coordinate)
