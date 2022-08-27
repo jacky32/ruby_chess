@@ -16,13 +16,6 @@ class Knight < Piece
 
     # return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
 
-    # start_y = start_coordinate['id_y']
-    # start_x = start_coordinate['id_x']
-    # end_y = end_coordinate['id_y']
-    # end_x = end_coordinate['id_x']
-
-    # return true if valid_vertical?(start_y, start_x, end_y, end_x) || valid_horizontal?(start_y, start_x, end_y, end_x)
-
     generate_possible_moves
 
     return true if @possible_moves.include?(end_coordinate['tile'])
@@ -38,8 +31,6 @@ class Knight < Piece
 
     # generates horizontal moves
     generate_knight_moves(@id_y + 1, @id_y - 1, @id_x + 2, @id_x - 2)
-
-    # filter_possible_moves
   end
 
   alias generate_possible_moves generate_all
@@ -56,33 +47,26 @@ class Knight < Piece
     @possible_moves << board[tid_y_plus][tid_x_minus] unless tid_x_minus < 1
   end
 
-  def valid_vertical?(start_y, start_x, end_y, end_x)
-    return true if end_y == start_y + 2 && (end_x == start_x + 1 || end_x == start_x - 1)
-    return true if end_y == start_y - 2 && (end_x == start_x + 1 || end_x == start_x - 1)
+  # def valid_vertical?(start_y, start_x, end_y, end_x)
+  #   return true if end_y == start_y + 2 && (end_x == start_x + 1 || end_x == start_x - 1)
+  #   return true if end_y == start_y - 2 && (end_x == start_x + 1 || end_x == start_x - 1)
 
-    false
-  end
+  #   false
+  # end
 
-  def valid_horizontal?(start_y, start_x, end_y, end_x)
-    return true if end_y == start_y + 1 && (end_x == start_x + 2 || end_x == start_x - 2)
-    return true if end_y == start_y - 1 && (end_x == start_x + 2 || end_x == start_x - 2)
+  # def valid_horizontal?(start_y, start_x, end_y, end_x)
+  #   return true if end_y == start_y + 1 && (end_x == start_x + 2 || end_x == start_x - 2)
+  #   return true if end_y == start_y - 1 && (end_x == start_x + 2 || end_x == start_x - 2)
 
-    false
-  end
-
-  def generate_possible_takes; end
+  #   false
+  # end
 
   # def secondary_move_checks_passed?(start_coordinate, end_coordinate) end
 
-  def valid_take?(start_coordinate, end_coordinate)
-    start_y = start_coordinate['id_y']
-    start_x = start_coordinate['id_x']
-    end_y = end_coordinate['id_y']
-    end_x = end_coordinate['id_x']
+  def valid_take?(_start_coordinate, end_coordinate)
+    generate_possible_takes
 
-    unless valid_vertical?(start_y, start_x, end_y, end_x) || valid_horizontal?(start_y, start_x, end_y, end_x)
-      return false
-    end
+    return false unless @possible_takes.include?(end_coordinate['tile'])
 
     enemy_on_tile?(end_coordinate)
   end
