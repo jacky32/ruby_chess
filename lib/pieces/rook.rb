@@ -18,6 +18,8 @@ class Rook < Piece
     generate_possible_moves
 
     return true if @possible_moves.include?(end_coordinate['tile'])
+
+    false
   end
 
   def secondary_move_checks_passed?(_start_coordinate, _end_coordinate)
