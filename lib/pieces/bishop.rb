@@ -22,7 +22,7 @@ class Bishop < Piece
     false
   end
 
-  def generate_possible_moves(_id_y, _id_x)
+  def generate_possible_moves(id_y, id_x)
     # select empty board tiles
     board_pieces = ObjectSpace.each_object(BoardPiece).to_a
 

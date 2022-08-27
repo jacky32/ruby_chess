@@ -16,67 +16,83 @@ class Rook < Piece
     return false unless preliminary_move_checks_passed?(start_coordinate, end_coordinate)
     return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
 
-    start_y = start_coordinate['id_y']
-    start_x = start_coordinate['id_x']
-    end_y = end_coordinate['id_y']
-    end_x = end_coordinate['id_x']
+    generate_possible_moves
+    @possible_moves.sort_by!(&:id_y)
+    print 'final, ', [end_coordinate['id_y'], end_coordinate['id_x']]
+    @possible_moves.each { |move| print 'current, ', [move.id_y, move.id_x], puts }
 
-    return true if valid_direction?(start_y, start_x, end_y, end_x)
+    return true if @possible_moves.include?(end_coordinate['tile'])
   end
 
-  def valid_direction?(start_y, start_x, end_y, end_x)
-    return true if start_y == end_y
-    return true if start_x == end_x
-
-    false
-  end
-
-  def secondary_move_checks_passed?(start_coordinate, end_coordinate)
-    return false if piece_in_way?(start_coordinate, end_coordinate)
-
+  def secondary_move_checks_passed?(_start_coordinate, _end_coordinate)
     true
   end
 
-  def piece_in_way?(start_coordinate, end_coordinate)
+  # TODO: fix generating tiles outside the border
+  def generate_all
+    @possible_moves = []
+    @possible_takes = []
+    generate_y_down
+    generate_y_up
+    generate_x_down
+    generate_x_up
+  end
+
+  alias generate_possible_moves generate_all
+  alias generate_possible_takes generate_all
+
+  def generate_y_down
+    id_y = @id_y - 1
     board = assign_board
-    start_y = start_coordinate['id_y']
-    start_x = start_coordinate['id_x']
-    end_y = end_coordinate['id_y']
-    end_x = end_coordinate['id_x']
+    loop do
+      @possible_moves << board[id_y][@id_x] if board[id_y][@id_x].empty?
+      @possible_takes << board[id_y][@id_x]
+      break unless id_y > 0 && board[id_y][@id_x].empty?
 
-    return false if start_x == end_x && y_clean?(start_y, start_x, end_y, board)
-    return false if start_y == end_y && x_clean?(start_y, start_x, end_x, board)
-
-    true
-  end
-
-  def y_clean?(start_y, start_x, end_y, board)
-    y = start_y < end_y ? (start_y..end_y).to_a : start_y.downto(end_y).to_a
-    y.shift
-    y.pop
-    y.each do |id_y|
-      return false unless board[id_y][start_x].empty?
+      id_y -= 1
     end
-
-    true
   end
 
-  def x_clean?(start_y, start_x, end_x, board)
-    x = start_x < end_x ? (start_x..end_x).to_a : start_x.downto(end_x).to_a
-    x.shift
-    x.pop
-    x.each do |id_x|
-      return false unless board[start_y][id_x].empty?
+  def generate_y_up
+    id_y = @id_y + 1
+    board = assign_board
+    loop do
+      @possible_moves << board[id_y][@id_x] if board[id_y][@id_x].empty?
+      @possible_takes << board[id_y][@id_x]
+      break unless id_y < 9 && board[id_y][@id_x].empty?
+
+      id_y += 1
     end
-
-    true
   end
 
-  def generate_possible_takes; end
+  def generate_x_down
+    id_x = @id_x - 1
+    board = assign_board
+    loop do
+      @possible_moves << board[@id_y][id_x] if board[@id_y][id_x].empty?
+      @possible_takes << board[@id_y][id_x]
+      break unless id_x > 0 && board[@id_y][id_x].empty?
 
-  def valid_take?(start_coordinate, end_coordinate)
-    return false if piece_in_way?(start_coordinate, end_coordinate)
+      id_x -= 1
+    end
+  end
 
-    enemy_on_tile?(end_coordinate)
+  def generate_x_up
+    id_x = @id_x + 1
+    board = assign_board
+    loop do
+      @possible_moves << board[@id_y][id_x] if board[@id_y][id_x].empty?
+      @possible_takes << board[@id_y][id_x]
+      break unless id_x < 9 && board[@id_y][id_x].empty?
+
+      id_x += 1
+    end
+  end
+
+  def valid_take?(_start_coordinate, end_coordinate)
+    generate_possible_takes
+    return false unless enemy_on_tile?(end_coordinate)
+
+    @possible_takes.include?(end_coordinate['tile'])
   end
 end
