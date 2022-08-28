@@ -20,7 +20,11 @@ class King < Piece
     end_y = end_coordinate['id_y']
     end_x = end_coordinate['id_x']
 
-    return false unless valid_move_one_around?(start_y, start_x, end_y, end_x)
+    # return false unless valid_move_one_around?(start_y, start_x, end_y, end_x)
+
+    generate_possible_moves
+
+    return true if @possible_moves.include?(end_coordinate['tile'])
 
     true
   end
@@ -29,6 +33,34 @@ class King < Piece
     return false if possible_check?(end_coordinate)
 
     true
+  end
+
+  def generate_all
+    @possible_moves = []
+    @possible_moves << generate_one_around
+    @possible_takes = @possible_moves
+  end
+
+  alias generate_possible_moves generate_all
+  alias generate_possible_takes generate_all
+
+  def generate_one_around
+    board = assign_board
+    generated_tiles = []
+    (-1..1).to_a.each do |index|
+      (-1..1).to_a.each do |index2|
+        tid_y = @id_y + index
+        tid_x = @id_x + index2
+        generated_tiles << board[tid_y][tid_x] unless filter(tid_y, tid_x, board)
+      end
+    end
+    generated_tiles
+  end
+
+  def filter(tid_y, tid_x, board)
+    [tid_y, tid_x].any? { |a| a > 8 || a < 1 } ||
+      (tid_y == @id_y && tid_x == @id_x) ||
+      friendly_on_tile?({ 'value' => board[tid_y][tid_x].content })
   end
 
   def possible_check?(coordinate)
@@ -50,6 +82,4 @@ class King < Piece
       piece.nil? || piece.piece_color == @piece_color
     end
   end
-
-  def valid_take?(start_coordinate, end_coordinate) end
 end
