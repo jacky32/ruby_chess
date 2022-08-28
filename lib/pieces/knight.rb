@@ -64,12 +64,4 @@ class Knight < Piece
   # end
 
   # def secondary_move_checks_passed?(start_coordinate, end_coordinate) end
-
-  def valid_take?(_start_coordinate, end_coordinate)
-    generate_possible_takes
-
-    return false unless @possible_takes.include?(end_coordinate['tile'])
-
-    enemy_on_tile?(end_coordinate)
-  end
 end

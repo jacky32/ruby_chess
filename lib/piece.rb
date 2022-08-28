@@ -92,4 +92,11 @@ class Piece
   def assign_board
     ObjectSpace.each_object(Board).to_a[0].board
   end
+
+  def valid_take?(_start_coordinate, end_coordinate)
+    generate_possible_takes
+    return false unless enemy_on_tile?(end_coordinate)
+
+    @possible_takes.include?(end_coordinate['tile'])
+  end
 end

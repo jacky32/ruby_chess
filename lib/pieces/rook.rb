@@ -34,11 +34,4 @@ class Rook < Piece
 
   alias generate_possible_moves generate_all
   alias generate_possible_takes generate_all
-
-  def valid_take?(_start_coordinate, end_coordinate)
-    generate_possible_takes
-    return false unless enemy_on_tile?(end_coordinate)
-
-    @possible_takes.include?(end_coordinate['tile'])
-  end
 end

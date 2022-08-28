@@ -25,7 +25,7 @@ class Queen < Piece
 
   def generate_all
     @possible_moves = []
-    generate_horizontal_and_vertical_moves
+    @possible_moves << generate_horizontal_and_vertical_moves
     @possible_takes = @possible_moves
   end
 
