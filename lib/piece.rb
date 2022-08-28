@@ -20,6 +20,30 @@ class Piece
     @id_x = piece_position[:id_x]
   end
 
+  def move(start_coordinate, end_coordinate)
+    add_to_piece_history(start_coordinate, end_coordinate)
+    refresh_piece_position(end_coordinate)
+    end_coordinate['tile'].content = start_coordinate['value']
+    start_coordinate['tile'].remove_piece
+  end
+
+  def take(start_coordinate, end_coordinate, board)
+    add_to_graveyard(end_coordinate['value'], board)
+    move(start_coordinate, end_coordinate)
+  end
+
+  def add_to_piece_history(start_coordinate, end_coordinate)
+    start_coordinate['value'].piece_moves << [
+      [start_coordinate['id_y'], translate_number_to_letter(start_coordinate['id_x'])],
+      [end_coordinate['id_y'], translate_number_to_letter(end_coordinate['id_x'])]
+    ]
+  end
+
+  def refresh_piece_position(coordinate)
+    @id_y = coordinate['id_y']
+    @id_x = coordinate['id_x']
+  end
+
   def add_to_graveyard(piece, board)
     board.graveyard << [piece.type, piece.piece_color]
   end

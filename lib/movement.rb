@@ -2,30 +2,6 @@
 
 # methods for shared movement
 module Movement
-  def move(start_coordinate, end_coordinate)
-    add_to_piece_history(start_coordinate, end_coordinate)
-    refresh_piece_position(end_coordinate)
-    end_coordinate['tile'].content = start_coordinate['value']
-    start_coordinate['tile'].remove_piece
-  end
-
-  def take(start_coordinate, end_coordinate, board)
-    add_to_graveyard(end_coordinate['value'], board)
-    move(start_coordinate, end_coordinate)
-  end
-
-  def add_to_piece_history(start_coordinate, end_coordinate)
-    start_coordinate['value'].piece_moves << [
-      [start_coordinate['id_y'], translate_number_to_letter(start_coordinate['id_x'])],
-      [end_coordinate['id_y'], translate_number_to_letter(end_coordinate['id_x'])]
-    ]
-  end
-
-  def refresh_piece_position(coordinate)
-    @id_y = coordinate['id_y']
-    @id_x = coordinate['id_x']
-  end
-
   def diagonal_piece_in_way?(start_y, start_x, end_y, end_x)
     distance = (end_y - start_y).abs
 
@@ -105,5 +81,48 @@ module Movement
     distance_y = end_y - start_y
     distance_x = end_x - start_x
     [-1, 0, 1].include?(distance_y) && [-1, 0, 1].include?(distance_x)
+  end
+
+  def generate_y_down
+    id_y = @id_y - 1
+    loop do
+      tile = assign_board[id_y][@id_x]
+      @possible_moves << tile if move_checks_passed?(tile)
+      break unless id_y > 0 && tile.empty?
+
+      id_y -= 1
+    end
+  end
+
+  def generate_y_up
+    id_y = @id_y + 1
+    loop do
+      tile = assign_board[id_y][@id_x]
+      break unless id_y < 9 && tile.empty?
+
+      id_y += 1
+    end
+  end
+
+  def generate_x_down
+    id_x = @id_x - 1
+    loop do
+      tile = assign_board[@id_y][id_x]
+      @possible_moves << tile if move_checks_passed?(tile)
+      break unless id_x > 0 && tile.empty?
+
+      id_x -= 1
+    end
+  end
+
+  def generate_x_up
+    id_x = @id_x + 1
+    loop do
+      tile = assign_board[@id_y][id_x]
+      @possible_moves << tile if move_checks_passed?(tile)
+      break unless id_x < 9 && tile.empty?
+
+      id_x += 1
+    end
   end
 end
