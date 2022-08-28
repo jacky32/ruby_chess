@@ -70,6 +70,7 @@ module Movement
   end
 
   def valid_move_one_around?(start_y, start_x, end_y, end_x)
+    board = assign_board
     distance_y = end_y - start_y
     distance_x = end_x - start_x
     [-1, 0, 1].include?(distance_y) && [-1, 0, 1].include?(distance_x)
