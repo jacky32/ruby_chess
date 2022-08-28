@@ -69,14 +69,6 @@ module Movement
     distance_y == distance_x
   end
 
-  def in_neighbouring_column?(start_coordinate, end_coordinate)
-    start_x = start_coordinate['id_x']
-    end_x = end_coordinate['id_x']
-    return true if end_x == start_x + 1 || end_x == start_x - 1
-
-    false
-  end
-
   def valid_move_one_around?(start_y, start_x, end_y, end_x)
     distance_y = end_y - start_y
     distance_x = end_x - start_x
@@ -84,52 +76,54 @@ module Movement
   end
 
   def generate_horizontal_and_vertical_moves
-    generate_y_down
-    generate_y_up
-    generate_x_down
-    generate_x_up
+    generate_y_down + generate_y_up + generate_x_down + generate_x_up
   end
 
-  def generate_y_down
-    id_y = @id_y - 1
+  def generate_y_down(id_y = @id_y - 1, generated_moves = [])
     loop do
       tile = assign_board[id_y][@id_x]
-      @possible_moves << tile if move_checks_passed?(tile)
+      generated_moves << tile if move_checks_passed?(tile)
       break unless id_y > 0 && tile.empty?
 
       id_y -= 1
     end
+    generated_moves
   end
 
-  def generate_y_up
-    id_y = @id_y + 1
+  def generate_y_up(id_y = @id_y + 1, generated_moves = [])
     loop do
       tile = assign_board[id_y][@id_x]
+      generated_moves << tile if move_checks_passed?(tile)
       break unless id_y < 9 && tile.empty?
 
       id_y += 1
     end
+    generated_moves
   end
 
-  def generate_x_down
-    id_x = @id_x - 1
+  def generate_x_down(id_x = @id_x - 1, generated_moves = [])
     loop do
       tile = assign_board[@id_y][id_x]
-      @possible_moves << tile if move_checks_passed?(tile)
+      generated_moves << tile if move_checks_passed?(tile)
       break unless id_x > 0 && tile.empty?
 
       id_x -= 1
     end
+    generated_moves
   end
 
-  def generate_x_up
-    id_x = @id_x + 1
+  def generate_x_up(id_x = @id_x + 1, generated_moves = [])
     loop do
       tile = assign_board[@id_y][id_x]
-      @possible_moves << tile if move_checks_passed?(tile)
+      generated_moves << tile if move_checks_passed?(tile)
       break unless id_x < 9 && tile.empty?
 
       id_x += 1
     end
+    generated_moves
+  end
+
+  def move_checks_passed?(tile)
+    within_board_boundaries?({ 'id_y' => tile.id_y, 'id_x' => tile.id_x })
   end
 end

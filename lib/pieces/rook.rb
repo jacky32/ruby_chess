@@ -28,17 +28,12 @@ class Rook < Piece
   end
 
   def generate_all
-    @possible_moves = []
-    generate_horizontal_and_vertical_moves
+    @possible_moves = generate_horizontal_and_vertical_moves
     @possible_takes = @possible_moves
   end
 
   alias generate_possible_moves generate_all
   alias generate_possible_takes generate_all
-
-  def move_checks_passed?(tile)
-    within_board_boundaries?({ 'id_y' => tile.id_y, 'id_x' => tile.id_x })
-  end
 
   def valid_take?(_start_coordinate, end_coordinate)
     generate_possible_takes

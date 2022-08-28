@@ -13,12 +13,26 @@ class Queen < Piece
 
   def valid_move?(start_coordinate, end_coordinate)
     return false unless preliminary_move_checks_passed?(start_coordinate, end_coordinate)
-    return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
+
+    # return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
+
+    generate_possible_moves
+
+    return true if @possible_moves.include?(end_coordinate['tile'])
+
+    false
   end
 
-  def generate_possible_takes; end
+  def generate_all
+    @possible_moves = []
+    generate_horizontal_and_vertical_moves
+    @possible_takes = @possible_moves
+  end
 
-  def secondary_move_checks_passed?(start_coordinate, end_coordinate) end
+  alias generate_possible_moves generate_all
+  alias generate_possible_takes generate_all
+
+  # def secondary_move_checks_passed?(start_coordinate, end_coordinate) end
 
   def valid_take?(start_coordinate, end_coordinate) end
 end

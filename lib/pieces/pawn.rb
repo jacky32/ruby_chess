@@ -92,6 +92,14 @@ class Pawn < Piece
     false
   end
 
+  def in_neighbouring_column?(start_coordinate, end_coordinate)
+    start_x = start_coordinate['id_x']
+    end_x = end_coordinate['id_x']
+    return true if end_x == start_x + 1 || end_x == start_x - 1
+
+    false
+  end
+
   def valid_cross_take?(start_coordinate, end_coordinate)
     start_y = start_coordinate['id_y']
     end_y = end_coordinate['id_y']
