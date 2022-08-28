@@ -69,11 +69,23 @@ module Movement
     distance_y == distance_x
   end
 
-  def valid_move_one_around?(start_y, start_x, end_y, end_x)
+  def generate_one_around
     board = assign_board
-    distance_y = end_y - start_y
-    distance_x = end_x - start_x
-    [-1, 0, 1].include?(distance_y) && [-1, 0, 1].include?(distance_x)
+    generated_tiles = []
+    (-1..1).to_a.each do |index|
+      (-1..1).to_a.each do |index2|
+        tid_y = @id_y + index
+        tid_x = @id_x + index2
+        generated_tiles << board[tid_y][tid_x] unless filter_one_around(tid_y, tid_x, board)
+      end
+    end
+    generated_tiles
+  end
+
+  def filter_one_around(tid_y, tid_x, board)
+    [tid_y, tid_x].any? { |a| a > 8 || a < 1 } ||
+      (tid_y == @id_y && tid_x == @id_x) ||
+      friendly_on_tile?({ 'value' => board[tid_y][tid_x].content })
   end
 
   def generate_horizontal_and_vertical_moves
