@@ -83,6 +83,13 @@ module Movement
     [-1, 0, 1].include?(distance_y) && [-1, 0, 1].include?(distance_x)
   end
 
+  def generate_horizontal_and_vertical_moves
+    generate_y_down
+    generate_y_up
+    generate_x_down
+    generate_x_up
+  end
+
   def generate_y_down
     id_y = @id_y - 1
     loop do

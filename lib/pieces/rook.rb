@@ -29,10 +29,7 @@ class Rook < Piece
 
   def generate_all
     @possible_moves = []
-    generate_y_down
-    generate_y_up
-    generate_x_down
-    generate_x_up
+    generate_horizontal_and_vertical_moves
     @possible_takes = @possible_moves
   end
 
