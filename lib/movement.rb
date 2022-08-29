@@ -5,55 +5,31 @@ module Movement
   # Bishop movement
   def diagonal_piece_in_way?(start_y, start_x, end_y, end_x)
     distance = (end_y - start_y).abs
-
-    return true if [
-      diagonal_piece_bottom_right?(distance, start_y, start_x, end_y, end_x),
-      diagonal_piece_bottom_left?(distance, start_y, start_x, end_y, end_x),
-      diagonal_piece_up_right?(distance, start_y, start_x, end_y, end_x),
-      diagonal_piece_up_left?(distance, start_y, start_x, end_y, end_x)
-    ].any?(true)
+    options = { option_one: { first_cond: end_y > start_y, second_cond: end_x > start_x, first_op: 1, second_op: 1 },
+                option_two: { first_cond: end_y > start_y, second_cond: end_x < start_x, first_op: 1, second_op: 0 },
+                option_three: { first_cond: end_y < start_y, second_cond: end_x > start_x, first_op: 0, second_op: 1 },
+                option_four: { first_cond: end_y < start_y, second_cond: end_x < start_x, first_op: 0, second_op: 0 } }
+    return true if diagonal_piece_in_way_check?(start_y, start_x, distance, options)
 
     false
   end
 
-  def diagonal_piece_bottom_right?(distance, start_y, start_x, end_y, end_x)
-    if end_y > start_y && end_x > start_x
+  def diagonal_piece_in_way_check?(start_y, start_x, distance, options)
+    options.each do |_option, value|
+      next unless value[:first_cond] && value[:second_cond]
+
       1.upto(distance - 1) do |increment|
-        return true unless assign_board[start_y + increment][start_x + increment].empty?
+        id_y = assign_diagonal_id(value[:first_op], start_y, increment)
+        id_x = assign_diagonal_id(value[:second_op], start_x, increment)
+        return true unless assign_board[id_y][id_x].empty?
       end
     end
 
     false
   end
 
-  def diagonal_piece_bottom_left?(distance, start_y, start_x, end_y, end_x)
-    if end_y > start_y && end_x < start_x
-      1.upto(distance - 1) do |increment|
-        return true unless assign_board[start_y + increment][start_x - increment].empty?
-      end
-    end
-
-    false
-  end
-
-  def diagonal_piece_up_right?(distance, start_y, start_x, end_y, end_x)
-    if end_y < start_y && end_x > start_x
-      1.upto(distance - 1) do |increment|
-        return true unless assign_board[start_y - increment][start_x + increment].empty?
-      end
-    end
-
-    false
-  end
-
-  def diagonal_piece_up_left?(distance, start_y, start_x, end_y, end_x)
-    if end_y < start_y && end_x < start_x
-      1.upto(distance - 1) do |increment|
-        return true unless assign_board[start_y - increment][start_x - increment].empty?
-      end
-    end
-
-    false
+  def assign_diagonal_id(opt, start_id, increment)
+    opt == 1 ? start_id + increment : start_id - increment
   end
 
   def valid_diagonal_checks(start_y, start_x, end_y, end_x)
