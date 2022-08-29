@@ -1,6 +1,7 @@
 # frozen_string_literal: false
 
 require_relative '../piece'
+require_relative '../movement'
 
 # class for the bishop pieces
 class Bishop < Piece
@@ -13,55 +14,27 @@ class Bishop < Piece
 
   def valid_move?(start_coordinate, end_coordinate)
     return false unless preliminary_move_checks_passed?(start_coordinate, end_coordinate)
-    return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
 
-    generate_possible_moves(start_coordinate['id_y'], start_coordinate['id_x'])
+    # return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
+
+    generate_possible_moves
 
     return true if @possible_moves.include?(end_coordinate['tile'])
 
     false
   end
 
-  def generate_possible_moves(id_y, id_x)
-    # select empty board tiles
-    board_pieces = ObjectSpace.each_object(BoardPiece).to_a
-
-    # check whether the tile id matches possible bishop route
-    board_pieces.select! do |tile|
-      filter_selection(id_y, id_x, tile)
-    end
-
-    @possible_moves = board_pieces.map { |tile| assign_board[tile.id_y][tile.id_x] }
+  def generate_all
+    @possible_moves = generate_diagonal_moves
+    @possible_takes = @possible_moves
   end
 
-  def generate_possible_takes(id_y = @id_y, id_x = @id_x)
-    board = assign_board
-    board_pieces = ObjectSpace.each_object(BoardPiece).to_a.select do |tile|
-      filter_selection(id_y, id_x, tile)
-    end
+  alias generate_possible_moves generate_all
+  alias generate_possible_takes generate_all
 
-    @possible_takes = board_pieces.map { |tile| board[tile.id_y][tile.id_x] }
-  end
-
-  def filter_selection(id_y, id_x, tile)
-    tid_y = tile.id_y
-    tid_x = tile.id_x
-    valid_diagonal_checks(id_y, id_x, tid_y, tid_x) &&
-      within_board_boundaries?({ 'id_y' => tid_y, 'id_x' => tid_x }) &&
-      !diagonal_piece_in_way?(id_y, id_x, tid_y, tid_x)
-  end
-
-  def secondary_move_checks_passed?(start_coordinate, end_coordinate)
-    start_y = start_coordinate['id_y']
-    start_x = start_coordinate['id_x']
-    end_y = end_coordinate['id_y']
-    end_x = end_coordinate['id_x']
-
-    return false if diagonal_piece_in_way?(start_y, start_x, end_y, end_x)
-    return false unless valid_diagonal_checks(start_y, start_x, end_y, end_x)
-
-    true
-  end
+  # def secondary_move_checks_passed?(start_coordinate, end_coordinate)
+  #   true
+  # end
 
   # def valid_take?(_start_coordinate, end_coordinate)
   #   generate_possible_takes
@@ -70,11 +43,4 @@ class Bishop < Piece
   #     enemy_on_tile?({ 'value' => assign_board[take.id_y][take.id_x].content })
   #   end
   # end
-
-  def valid_take?(_start_coordinate, end_coordinate)
-    generate_possible_takes
-    return false unless enemy_on_tile?(end_coordinate)
-
-    @possible_takes.include?(end_coordinate['tile'])
-  end
 end
