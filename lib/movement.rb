@@ -108,71 +108,25 @@ module Movement
 
   # Rook movement
   def generate_horizontal_and_vertical_moves
-    # generate_y_down + generate_y_up + generate_x_down + generate_x_up
-    generator
-  end
-
-  def generate_y_down(id_y = @id_y - 1, generated_moves = [])
-    loop do
-      tile = assign_board[id_y][@id_x]
-      generated_moves << tile if move_checks_passed?(tile)
-      break unless id_y > 0 && tile.empty?
-
-      id_y -= 1
-    end
-    generated_moves
-  end
-
-  def generator
-    options = { option_y_down: { id_y: @id_y - 1, id_x: @id_x, rule_id: 'id_y', rule_value: -1 },
-                option_y_up: { id_y: @id_y + 1, id_x: @id_x, rule_id: 'id_y', rule_value: 1 },
-                option_x_down: { id_y: @id_y, id_x: @id_x - 1, rule_id: 'id_x', rule_value: -1 },
-                option_x_up: { id_y: @id_y, id_x: @id_x + 1, rule_id: 'id_x', rule_value: 1 } }
+    options = { option_y_down: { id_y: @id_y - 1, id_x: @id_x, rule_id: @id_y - 1, rule_value: -1 },
+                option_y_up: { id_y: @id_y + 1, id_x: @id_x, rule_id: @id_y + 1, rule_value: 1 },
+                option_x_down: { id_y: @id_y, id_x: @id_x - 1, rule_id: @id_x - 1, rule_value: -1 },
+                option_x_up: { id_y: @id_y, id_x: @id_x + 1, rule_id: @id_x + 1, rule_value: 1 } }
     generated_moves = []
     options.each do |_option, value|
-      id_y = value[:id_y]
-      id_x = value[:id_x]
-      rule_id = (value[:rule_id] == 'id_y' ? id_y : id_x)
-      loop do
-        tile = (value[:id_y] == @id_y ? assign_board[id_y][rule_id] : assign_board[rule_id][id_x])
-        generated_moves << tile if move_checks_passed?(tile)
-        break unless (value[:rule_value] > 0 ? (rule_id < 9) : (rule_id > 0)) && tile.empty?
-
-        rule_id += value[:rule_value]
-      end
+      generated_moves << generate_option_moves(value[:id_y], value[:id_x], value[:rule_id], value[:rule_value])
     end
-    generated_moves
+    generated_moves.flatten!
   end
 
-  def generate_y_up(id_y = @id_y + 1, generated_moves = [])
+  def generate_option_moves(id_y, id_x, rule_id, rule_value, board = assign_board)
+    generated_moves = []
     loop do
-      tile = assign_board[id_y][@id_x]
+      tile = (id_y == @id_y ? board[id_y][rule_id] : board[rule_id][id_x])
       generated_moves << tile if move_checks_passed?(tile)
-      break unless id_y < 9 && tile.empty?
+      break unless (rule_value > 0 ? (rule_id < 9) : (rule_id > 0)) && tile.empty?
 
-      id_y += 1
-    end
-    generated_moves
-  end
-
-  def generate_x_down(id_x = @id_x - 1, generated_moves = [])
-    loop do
-      tile = assign_board[@id_y][id_x]
-      generated_moves << tile if move_checks_passed?(tile)
-      break unless id_x > 0 && tile.empty?
-
-      id_x -= 1
-    end
-    generated_moves
-  end
-
-  def generate_x_up(id_x = @id_x + 1, generated_moves = [])
-    loop do
-      tile = assign_board[@id_y][id_x]
-      generated_moves << tile if move_checks_passed?(tile)
-      break unless id_x < 9 && tile.empty?
-
-      id_x += 1
+      rule_id += rule_value
     end
     generated_moves
   end
