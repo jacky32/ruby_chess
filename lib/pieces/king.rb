@@ -30,8 +30,7 @@ class King < Piece
   end
 
   def generate_all
-    @possible_moves = []
-    @possible_moves << generate_one_around
+    @possible_moves = generate_one_around
     @possible_takes = @possible_moves
   end
 
