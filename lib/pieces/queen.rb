@@ -1,6 +1,7 @@
 # frozen_string_literal: false
 
 require_relative '../piece'
+require_relative '../movement'
 
 # class for the queen pieces
 class Queen < Piece
@@ -24,8 +25,10 @@ class Queen < Piece
   end
 
   def generate_all
-    @possible_moves = []
+    @possible_moves = generate_one_around
     @possible_moves << generate_horizontal_and_vertical_moves
+    @possible_moves << generate_diagonal_moves
+    @possible_moves.flatten!.uniq!
     @possible_takes = @possible_moves
   end
 
@@ -33,6 +36,4 @@ class Queen < Piece
   alias generate_possible_takes generate_all
 
   # def secondary_move_checks_passed?(start_coordinate, end_coordinate) end
-
-  def valid_take?(start_coordinate, end_coordinate) end
 end
