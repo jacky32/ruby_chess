@@ -66,7 +66,7 @@ class Board
     end
 
     @board[7].each do |tile|
-      tile.generate_piece('pawn', 'white', { 'id_y': 2, 'id_x': tile.id_x }) unless tile.id_y.zero? || tile.id_y == 9
+      tile.generate_piece('pawn', 'white', { 'id_y': 7, 'id_x': tile.id_x }) unless tile.id_y.zero? || tile.id_y == 9
     end
   end
 

@@ -27,6 +27,17 @@ class Piece
     start_coordinate['tile'].remove_piece
   end
 
+  def valid_move?(start_coordinate, end_coordinate)
+    return false unless preliminary_move_checks_passed?(start_coordinate, end_coordinate)
+    return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
+
+    generate_possible_moves
+
+    return true if @possible_moves.include?(end_coordinate['tile'])
+
+    false
+  end
+
   def take(start_coordinate, end_coordinate, board)
     add_to_graveyard(end_coordinate['value'], board)
     move(start_coordinate, end_coordinate)

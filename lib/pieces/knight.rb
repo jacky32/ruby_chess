@@ -11,18 +11,6 @@ class Knight < Piece
     assign_visual("\u265E")
   end
 
-  def valid_move?(start_coordinate, end_coordinate)
-    return false unless preliminary_move_checks_passed?(start_coordinate, end_coordinate)
-
-    # return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
-
-    generate_possible_moves
-
-    return true if @possible_moves.include?(end_coordinate['tile'])
-
-    false
-  end
-
   def generate_all
     @possible_moves = []
 
@@ -63,5 +51,7 @@ class Knight < Piece
   #   false
   # end
 
-  # def secondary_move_checks_passed?(start_coordinate, end_coordinate) end
+  def secondary_move_checks_passed?(_start_coordinate, _end_coordinate)
+    true # True or add checks
+  end
 end

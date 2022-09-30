@@ -66,10 +66,10 @@ module Movement
   def generate_one_around
     board = assign_board
     generated_tiles = []
-    (-1..1).to_a.each do |index|
-      (-1..1).to_a.each do |index2|
-        tid_y = @id_y + index
-        tid_x = @id_x + index2
+    (-1..1).to_a.each do
+      (-1..1).to_a.each do
+        tid_y = @id_y + 1
+        tid_x = @id_x + 1
         generated_tiles << board[tid_y][tid_x] unless filter_one_around(tid_y, tid_x, board)
       end
     end

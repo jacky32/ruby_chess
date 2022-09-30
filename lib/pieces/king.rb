@@ -12,17 +12,6 @@ class King < Piece
     assign_visual("\u265A")
   end
 
-  def valid_move?(start_coordinate, end_coordinate)
-    return false unless preliminary_move_checks_passed?(start_coordinate, end_coordinate)
-    return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
-
-    generate_possible_moves
-
-    return true if @possible_moves.include?(end_coordinate['tile'])
-
-    true
-  end
-
   def secondary_move_checks_passed?(_start_coordinate, end_coordinate)
     return false if possible_check?(end_coordinate)
 
@@ -40,8 +29,6 @@ class King < Piece
   def possible_check?(coordinate)
     pieces = assign_pieces
     pieces.any? do |piece|
-      next if %w[queen king knight].include?(piece.type)
-
       piece.generate_possible_takes
       takes = piece.possible_takes
       takes.any? do |take|

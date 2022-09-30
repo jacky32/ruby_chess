@@ -12,18 +12,6 @@ class Queen < Piece
     assign_visual("\u265B")
   end
 
-  def valid_move?(start_coordinate, end_coordinate)
-    return false unless preliminary_move_checks_passed?(start_coordinate, end_coordinate)
-
-    # return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
-
-    generate_possible_moves
-
-    return true if @possible_moves.include?(end_coordinate['tile'])
-
-    false
-  end
-
   def generate_all
     @possible_moves = generate_one_around
     @possible_moves << generate_horizontal_and_vertical_moves
@@ -35,5 +23,7 @@ class Queen < Piece
   alias generate_possible_moves generate_all
   alias generate_possible_takes generate_all
 
-  # def secondary_move_checks_passed?(start_coordinate, end_coordinate) end
+  def secondary_move_checks_passed?(_start_coordinate, _end_coordinate)
+    true # True or add checks
+  end
 end
