@@ -4,16 +4,16 @@ require_relative '../piece'
 
 # class for the pawn pieces
 class Pawn < Piece
-  attr_reader(:piece_color, :visual, :piece_moves, :type, :possible_moves, :possible_takes, :id_y, :id_x)
+  attr_reader(:piece_color, :visual, :piece_moves, :possible_moves, :possible_takes, :id_y, :id_x)
 
-  def initialize(piece_color, type, piece_position)
+  def initialize(piece_color:, piece_position:)
     super
     assign_visual("\u265F")
   end
 
   def optional_move_checks_passed?(start_coordinate, end_coordinate)
     # checks whether in the same line
-    return false if start_coordinate['id_x'] != end_coordinate['id_x']
+    return false if start_coordinate[:id_x] != end_coordinate[:id_x]
 
     true
   end
@@ -59,16 +59,16 @@ class Pawn < Piece
   end
 
   def in_neighbouring_column?(start_coordinate, end_coordinate)
-    start_x = start_coordinate['id_x']
-    end_x = end_coordinate['id_x']
+    start_x = start_coordinate[:id_x]
+    end_x = end_coordinate[:id_x]
     return true if end_x == start_x + 1 || end_x == start_x - 1
 
     false
   end
 
   def valid_cross_take?(start_coordinate, end_coordinate)
-    start_y = start_coordinate['id_y']
-    end_y = end_coordinate['id_y']
+    start_y = start_coordinate[:id_y]
+    end_y = end_coordinate[:id_y]
     return false unless enemy_on_tile?(end_coordinate)
     return false unless in_neighbouring_column?(start_coordinate, end_coordinate)
 

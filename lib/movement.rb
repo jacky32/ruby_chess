@@ -58,7 +58,7 @@ module Movement
     tid_y = tile.id_y
     tid_x = tile.id_x
     valid_diagonal_checks(id_y, id_x, tid_y, tid_x) &&
-      within_board_boundaries?({ 'id_y' => tid_y, 'id_x' => tid_x }) &&
+      within_board_boundaries?({ id_y: tid_y, id_x: tid_x }) &&
       !diagonal_piece_in_way?(id_y, id_x, tid_y, tid_x)
   end
 
@@ -79,7 +79,7 @@ module Movement
   def filter_one_around(tid_y, tid_x, board)
     [tid_y, tid_x].any? { |a| a > 8 || a < 1 } ||
       (tid_y == @id_y && tid_x == @id_x) ||
-      friendly_on_tile?({ 'value' => board[tid_y][tid_x].content })
+      friendly_on_tile?({ value: board[tid_y][tid_x].content })
   end
 
   # Rook movement
@@ -108,6 +108,6 @@ module Movement
   end
 
   def move_checks_passed?(tile)
-    within_board_boundaries?({ 'id_y' => tile.id_y, 'id_x' => tile.id_x })
+    within_board_boundaries?({ id_y: tile.id_y, id_x: tile.id_x })
   end
 end

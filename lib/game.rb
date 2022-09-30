@@ -89,7 +89,7 @@ class Game
   end
 
   def check_input_move(start_coordinate, end_coordinate)
-    start_piece = start_coordinate['value']
+    start_piece = start_coordinate[:value]
 
     return invalid_input if start_piece.nil?
 
@@ -114,8 +114,8 @@ class Game
 
   def check_input_coordinates(start_coordinate, end_coordinate)
     # checks whether each element part is a valid position
-    return false unless (1..8).to_a.include?(start_coordinate['id_x'] && end_coordinate['id_x'])
-    return false unless (1..8).to_a.include?(start_coordinate['id_y'] && end_coordinate['id_y'])
+    return false unless (1..8).to_a.include?(start_coordinate[:id_x] && end_coordinate[:id_x])
+    return false unless (1..8).to_a.include?(start_coordinate[:id_y] && end_coordinate[:id_y])
 
     true
   end

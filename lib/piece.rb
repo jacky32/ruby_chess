@@ -5,26 +5,27 @@ require_relative 'movement'
 
 # class for the general piece logic
 class Piece
-  attr_accessor(:piece_color, :piece_moves, :type, :id_y, :id_x)
+  attr_accessor(:piece_color, :piece_moves, :id_y, :id_x)
 
   include Translate
   include Movement
 
-  def initialize(piece_color, type, piece_position)
+  def initialize(piece_color:, piece_position:)
     @piece_color = piece_color
     @piece_moves = []
     @possible_moves = []
     @possible_takes = []
-    @type = type
     @id_y = piece_position[:id_y]
     @id_x = piece_position[:id_x]
   end
 
   def move(start_coordinate, end_coordinate)
+    return unless valid_move?(start_coordinate, end_coordinate)
+
     add_to_piece_history(start_coordinate, end_coordinate)
     refresh_piece_position(end_coordinate)
-    end_coordinate['tile'].content = start_coordinate['value']
-    start_coordinate['tile'].remove_piece
+    end_coordinate[:tile].content = start_coordinate[:value]
+    start_coordinate[:tile].remove_piece
   end
 
   def valid_move?(start_coordinate, end_coordinate)
@@ -33,30 +34,32 @@ class Piece
 
     generate_possible_moves
 
-    return true if @possible_moves.include?(end_coordinate['tile'])
+    return true if @possible_moves.include?(end_coordinate[:tile])
 
     false
   end
 
   def take(start_coordinate, end_coordinate, board)
-    add_to_graveyard(end_coordinate['value'], board)
+    return unless valid_take?(start_coordinate, end_coordinate)
+
+    add_to_graveyard(end_coordinate[:value], board)
     move(start_coordinate, end_coordinate)
   end
 
   def add_to_piece_history(start_coordinate, end_coordinate)
-    start_coordinate['value'].piece_moves << [
-      [start_coordinate['id_y'], translate_number_to_letter(start_coordinate['id_x'])],
-      [end_coordinate['id_y'], translate_number_to_letter(end_coordinate['id_x'])]
+    start_coordinate[:value].piece_moves << [
+      [start_coordinate[:id_y], translate_number_to_letter(start_coordinate[:id_x])],
+      [end_coordinate[:id_y], translate_number_to_letter(end_coordinate[:id_x])]
     ]
   end
 
   def refresh_piece_position(coordinate)
-    @id_y = coordinate['id_y']
-    @id_x = coordinate['id_x']
+    @id_y = coordinate[:id_y]
+    @id_x = coordinate[:id_x]
   end
 
   def add_to_graveyard(piece, board)
-    board.graveyard << [piece.type, piece.piece_color]
+    board.graveyard << piece
   end
 
   def assign_visual(type)
@@ -79,25 +82,25 @@ class Piece
   end
 
   def friendly_on_tile?(coordinate)
-    return false if coordinate['value'].nil?
-    return false if coordinate['value'].piece_color != @piece_color
+    return false if coordinate[:value].nil?
+    return false if coordinate[:value].piece_color != @piece_color
 
     true
   end
 
   def enemy_on_tile?(coordinate)
-    return false if coordinate['value'].nil?
-    return false if coordinate['value'].piece_color == @piece_color
+    return false if coordinate[:value].nil?
+    return false if coordinate[:value].piece_color == @piece_color
 
     true
   end
 
   def within_board_boundaries?(coordinate)
-    (1..8).to_a.include?(coordinate['id_y']) && (1..8).to_a.include?(coordinate['id_x'])
+    (1..8).to_a.include?(coordinate[:id_y]) && (1..8).to_a.include?(coordinate[:id_x])
   end
 
   def different_coordinates?(start_coordinate, end_coordinate)
-    [start_coordinate['id_y'], start_coordinate['id_x']] != [end_coordinate['id_y'], end_coordinate['id_x']]
+    [start_coordinate[:id_y], start_coordinate[:id_x]] != [end_coordinate[:id_y], end_coordinate[:id_x]]
   end
 
   def assign_board
@@ -108,6 +111,6 @@ class Piece
     generate_possible_takes
     return false unless enemy_on_tile?(end_coordinate)
 
-    @possible_takes.include?(end_coordinate['tile'])
+    @possible_takes.include?(end_coordinate[:tile])
   end
 end

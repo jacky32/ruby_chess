@@ -17,9 +17,9 @@ module Translate
   def coordinate_to_hash(coordinate)
     id_x = translate_letter_to_number(coordinate[0])
     id_y = 9 - coordinate[1].to_i
-    { 'id_x' => id_x,
-      'id_y' => id_y,
-      'tile' => @board.board[id_y][id_x],
-      'value' => @board.board[id_y][id_x].content }
+    { id_x: id_x,
+      id_y: id_y,
+      tile: @board.board[id_y][id_x],
+      value: @board.board[id_y][id_x].content }
   end
 end

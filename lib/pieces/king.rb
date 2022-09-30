@@ -5,9 +5,9 @@ require_relative '../movement'
 
 # class for the king pieces
 class King < Piece
-  attr_reader(:piece_color, :visual, :piece_moves, :type, :possible_moves, :possible_takes, :id_y, :id_x)
+  attr_reader(:piece_color, :visual, :piece_moves, :possible_moves, :possible_takes, :id_y, :id_x)
 
-  def initialize(piece_color, type, piece_position)
+  def initialize(piece_color:, piece_position:)
     super
     assign_visual("\u265A")
   end
@@ -32,7 +32,7 @@ class King < Piece
       piece.generate_possible_takes
       takes = piece.possible_takes
       takes.any? do |take|
-        take.id_y == coordinate['id_y'] && take.id_x == coordinate['id_x']
+        take.id_y == coordinate[:id_y] && take.id_x == coordinate[:id_x]
       end
     end
   end
