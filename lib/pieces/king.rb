@@ -12,7 +12,7 @@ class King < Piece
     assign_visual("\u265A")
   end
 
-  def secondary_move_checks_passed?(_start_coordinate, end_coordinate)
+  def optional_move_checks_passed?(_start_coordinate, end_coordinate)
     return false if possible_check?(end_coordinate)
 
     true

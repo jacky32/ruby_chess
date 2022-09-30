@@ -20,7 +20,7 @@ class Bishop < Piece
   alias generate_possible_moves generate_all
   alias generate_possible_takes generate_all
 
-  def secondary_move_checks_passed?(_start_coordinate, _end_coordinate)
+  def optional_move_checks_passed?(_start_coordinate, _end_coordinate)
     true # True or add checks
   end
 

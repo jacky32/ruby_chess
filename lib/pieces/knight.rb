@@ -51,7 +51,7 @@ class Knight < Piece
   #   false
   # end
 
-  def secondary_move_checks_passed?(_start_coordinate, _end_coordinate)
+  def optional_move_checks_passed?(_start_coordinate, _end_coordinate)
     true # True or add checks
   end
 end

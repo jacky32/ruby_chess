@@ -11,7 +11,7 @@ class Pawn < Piece
     assign_visual("\u265F")
   end
 
-  def secondary_move_checks_passed?(start_coordinate, end_coordinate)
+  def optional_move_checks_passed?(start_coordinate, end_coordinate)
     # checks whether in the same line
     return false if start_coordinate['id_x'] != end_coordinate['id_x']
 

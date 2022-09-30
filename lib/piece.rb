@@ -28,8 +28,8 @@ class Piece
   end
 
   def valid_move?(start_coordinate, end_coordinate)
-    return false unless preliminary_move_checks_passed?(start_coordinate, end_coordinate)
-    return false unless secondary_move_checks_passed?(start_coordinate, end_coordinate)
+    return false unless basic_move_checks_passed?(start_coordinate, end_coordinate)
+    return false unless optional_move_checks_passed?(start_coordinate, end_coordinate)
 
     generate_possible_moves
 
@@ -67,7 +67,7 @@ class Piece
               end
   end
 
-  def preliminary_move_checks_passed?(start_coordinate, end_coordinate)
+  def basic_move_checks_passed?(start_coordinate, end_coordinate)
     # checks whether the board doesn't end
     return false unless within_board_boundaries?(end_coordinate)
     # checks whether coordinates are the same
