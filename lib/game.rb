@@ -20,7 +20,7 @@ class Game
     # decision = gets.chomp
     # return load if decision == 'load'
 
-    # choose_players
+    # generate_players
     @board.generate
     game_loop
   end
@@ -30,43 +30,34 @@ class Game
   def load() end
 
   def game_loop
+    @current_player = @white_player
     loop do
-      # puts "\e[97m#{@white_player.name}'s\e[0m turn!"
-      process_input('white')
+      show_player_turn_message
+      process_input(current_player)
       @board.show_board
       break if conditions_met?
 
-      # puts "\e[30m#{@black_player.name}'s\e[0m turn!"
-      process_input('black')
-      @board.show_board
-      break if conditions_met?
+      switch_current_player
+    end
+  end
+
+  def switch_current_player
+    @current_player = @current_player == @white_player ? @black_player : @white_player
+  end
+
+  def show_player_turn_message
+    if @current_player == @white_player
+      puts "\e[97m#{@white_player.name}'s\e[0m turn!"
+    else
+      puts "\e[30m#{@black_player.name}'s\e[0m turn!"
     end
   end
 
   def conditions_met?() end
 
-  def choose_players
-    @white_player = Player.new(name_loop('white'), 'white')
-    @black_player = Player.new(name_loop('black'), 'black')
-  end
-
-  def name_loop(color)
-    puts "Choose name for the #{color} player"
-    name = gets.chomp
-    loop do
-      name_valid = check_name_validity(name)
-      break if name_valid == true
-
-      puts name_valid
-      name = gets.chomp
-    end
-    name
-  end
-
-  def check_name_validity(name)
-    return 'Too long, try again' if name.size > 12
-
-    true
+  def generate_players
+    @white_player = Player.new('white')
+    @black_player = Player.new('black')
   end
 
   def process_input(color)
