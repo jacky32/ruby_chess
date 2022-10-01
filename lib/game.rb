@@ -61,10 +61,11 @@ class Game
 
     if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board.board)
       move_piece(start_coordinate, end_coordinate)
-    elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board.board)
+    elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate,
+                                  board: @board.board)
       take_piece(start_coordinate, end_coordinate)
     else
-      puts 'Invalid move'
+      puts "Invalid move Y:#{start_coordinate[:id_y]} X:#{start_coordinate[:id_x]} -> Y:#{end_coordinate[:id_y]} X:#{end_coordinate[:id_x]} "
     end
   end
 

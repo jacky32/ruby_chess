@@ -89,8 +89,4 @@ class Piece
   def different_coordinates?(start_coordinate, end_coordinate)
     [start_coordinate[:id_y], start_coordinate[:id_x]] != [end_coordinate[:id_y], end_coordinate[:id_x]]
   end
-
-  def assign_board
-    ObjectSpace.each_object(Board).to_a[0].board
-  end
 end
