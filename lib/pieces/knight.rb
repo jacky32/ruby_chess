@@ -15,10 +15,12 @@ class Knight < Piece
     @possible_moves = []
 
     # generates vertical moves
-    generate_knight_moves(@id_y + 2, @id_y - 2, @id_x + 1, @id_x - 1, board)
+    generate_knight_moves(id_y_plus: @id_y + 2, id_y_minus: @id_y - 2, id_x_plus: @id_x + 1, id_x_minus: @id_x - 1,
+                          board: board)
 
     # generates horizontal moves
-    generate_knight_moves(@id_y + 1, @id_y - 1, @id_x + 2, @id_x - 2, board)
+    generate_knight_moves(id_y_plus: @id_y + 1, id_y_minus: @id_y - 1, id_x_plus: @id_x + 2, id_x_minus: @id_x - 2,
+                          board: board)
 
     @possible_takes = @possible_moves
   end
@@ -26,15 +28,17 @@ class Knight < Piece
   alias generate_possible_moves generate_all
   alias generate_possible_takes generate_all
 
-  def generate_knight_moves(tid_y_plus, tid_y_minus, tid_x_plus, tid_x_minus, board)
-    if tid_y_minus > 0
-      @possible_moves << board[tid_y_minus][tid_x_plus] unless tid_x_minus < 1
-      @possible_moves << board[tid_y_minus][tid_x_minus] unless tid_x_plus > 8
-    end
-    return unless tid_y_plus < 9
+  private
 
-    @possible_moves << board[tid_y_plus][tid_x_plus] unless tid_x_plus > 8
-    @possible_moves << board[tid_y_plus][tid_x_minus] unless tid_x_minus < 1
+  def generate_knight_moves(id_y_plus:, id_y_minus:, id_x_plus:, id_x_minus:, board:)
+    if id_y_minus > 0
+      @possible_moves << board[id_y_minus][id_x_plus] if id_x_plus < 9
+      @possible_moves << board[id_y_minus][id_x_minus] if id_x_minus > 0
+    end
+    return unless id_y_plus < 9
+
+    @possible_moves << board[id_y_plus][id_x_plus] if id_x_plus < 9
+    @possible_moves << board[id_y_plus][id_x_minus] if id_x_minus > 0
   end
 
   # def valid_vertical?(start_y, start_x, end_y, end_x)
