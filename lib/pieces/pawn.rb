@@ -11,12 +11,11 @@ class Pawn < Piece
     assign_visual("\u265F")
   end
 
-  def optional_move_checks_passed?(start_coordinate, end_coordinate)
-    # checks whether in the same line
-    return false if start_coordinate[:id_x] != end_coordinate[:id_x]
-
-    true
+  def valid_take?(start_coordinate:, end_coordinate:, **_)
+    valid_cross_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
   end
+
+  private
 
   def generate_possible_moves(board:)
     @possible_moves = []
@@ -27,6 +26,22 @@ class Pawn < Piece
     end
   end
 
+  def generate_possible_takes(board:, id_y: @id_y, id_x: @id_x)
+    @possible_takes = []
+    if @piece_color == 'white'
+      generate_white_takes(id_y: id_y, id_x: id_x, board: board)
+    else
+      generate_black_takes(id_y: id_y, id_x: id_x, board: board)
+    end
+  end
+
+  def optional_move_checks_passed?(start_coordinate, end_coordinate)
+    # checks whether in the same line
+    return false if start_coordinate[:id_x] != end_coordinate[:id_x]
+
+    true
+  end
+
   def generate_white_moves(board:)
     @possible_moves << board[@id_y - 1][@id_x]
     @possible_moves << board[@id_y - 2][@id_x] if @piece_moves.empty?
@@ -35,15 +50,6 @@ class Pawn < Piece
   def generate_black_moves(board:)
     @possible_moves << board[@id_y + 1][@id_x]
     @possible_moves << board[@id_y + 2][@id_x] if @piece_moves.empty?
-  end
-
-  def generate_possible_takes(board:, id_y: @id_y, id_x: @id_x)
-    @possible_takes = []
-    if @piece_color == 'white'
-      generate_white_takes(id_y: id_y, id_x: id_x, board: board)
-    else
-      generate_black_takes(id_y: id_y, id_x: id_x, board: board)
-    end
   end
 
   def generate_white_takes(id_y:, id_x:, board:)
@@ -75,9 +81,5 @@ class Pawn < Piece
     end
 
     true
-  end
-
-  def valid_take?(start_coordinate:, end_coordinate:, **_)
-    valid_cross_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
   end
 end
