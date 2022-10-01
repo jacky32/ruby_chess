@@ -141,6 +141,91 @@ describe Pawn do
           expect(enemy_tile).not_to be(black_pawn)
           expect(starting_tile).not_to be(@pawn)
         end
+
+        it 'takes black pawn at a3' do
+          enemy_id_y = 6
+          enemy_id_x = 1
+          black_pawn = create_piece(board: @board, id_y: enemy_id_y, id_x: enemy_id_x, type: 'pawn', color: 'black')
+
+          enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
+
+          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+
+          enemy_tile = @board[enemy_id_y, enemy_id_x]
+          starting_tile = @board[@start_id_y, @start_id_x]
+
+          expect(enemy_tile).to be(@pawn)
+          expect(enemy_tile).not_to be(black_pawn)
+          expect(starting_tile).not_to be(@pawn)
+        end
+
+        it "doesn't take black pawn at e7" do
+          enemy_id_y = 2
+          enemy_id_x = 5
+          black_pawn = create_piece(board: @board, id_y: enemy_id_y, id_x: enemy_id_x, type: 'pawn', color: 'black')
+
+          enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
+
+          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+
+          enemy_tile = @board[enemy_id_y, enemy_id_x]
+          starting_tile = @board[@start_id_y, @start_id_x]
+
+          expect(enemy_tile).not_to be(@pawn)
+          expect(enemy_tile).to be(black_pawn)
+          expect(starting_tile).to be(@pawn)
+        end
+
+        it "doesn't take black pawn at b3" do
+          enemy_id_y = 6
+          enemy_id_x = 2
+          black_pawn = create_piece(board: @board, id_y: enemy_id_y, id_x: enemy_id_x, type: 'pawn', color: 'black')
+
+          enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
+
+          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+
+          enemy_tile = @board[enemy_id_y, enemy_id_x]
+          starting_tile = @board[@start_id_y, @start_id_x]
+
+          expect(enemy_tile).not_to be(@pawn)
+          expect(enemy_tile).to be(black_pawn)
+          expect(starting_tile).to be(@pawn)
+        end
+
+        it "doesn't take white pawn at a3" do
+          enemy_id_y = 6
+          enemy_id_x = 1
+          white_pawn = create_piece(board: @board, id_y: enemy_id_y, id_x: enemy_id_x, type: 'pawn', color: 'white')
+
+          enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
+
+          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+
+          enemy_tile = @board[enemy_id_y, enemy_id_x]
+          starting_tile = @board[@start_id_y, @start_id_x]
+
+          expect(enemy_tile).not_to be(@pawn)
+          expect(enemy_tile).to be(white_pawn)
+          expect(starting_tile).to be(@pawn)
+        end
+
+        it "doesn't take white pawn at b3" do
+          enemy_id_y = 6
+          enemy_id_x = 2
+          white_pawn = create_piece(board: @board, id_y: enemy_id_y, id_x: enemy_id_x, type: 'pawn', color: 'white')
+
+          enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
+
+          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+
+          enemy_tile = @board[enemy_id_y, enemy_id_x]
+          starting_tile = @board[@start_id_y, @start_id_x]
+
+          expect(enemy_tile).not_to be(@pawn)
+          expect(enemy_tile).to be(white_pawn)
+          expect(starting_tile).to be(@pawn)
+        end
       end
     end
   end
