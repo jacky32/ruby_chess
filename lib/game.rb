@@ -13,11 +13,10 @@ class Game
   include Translate
 
   def initialize
-    start
+    @board = Board.new
   end
 
   def start
-    @board = Board.new
     # puts "Start a new game or load from save? (type \e[35mstart\e[0m or \e[35mload\e[0m)"
     # decision = gets.chomp
     # return load if decision == 'load'
@@ -62,7 +61,7 @@ class Game
 
     if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board.board)
       move_piece(start_coordinate, end_coordinate)
-    elsif start_piece.valid_take?(end_coordinate: end_coordinate, board: @board.board)
+    elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board.board)
       take_piece(start_coordinate, end_coordinate)
     else
       puts 'Invalid move'

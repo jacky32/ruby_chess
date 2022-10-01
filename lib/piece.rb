@@ -30,7 +30,7 @@ class Piece
     false
   end
 
-  def valid_take?(end_coordinate:, board:)
+  def valid_take?(end_coordinate:, board:, **_)
     generate_possible_takes(board: board)
     return false unless enemy_on_tile?(end_coordinate)
 

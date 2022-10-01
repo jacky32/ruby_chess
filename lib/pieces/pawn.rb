@@ -19,6 +19,7 @@ class Pawn < Piece
   end
 
   def generate_possible_moves(board:)
+    @possible_moves = []
     if @piece_color == 'white'
       generate_white_moves(board: board)
     else
@@ -55,19 +56,17 @@ class Pawn < Piece
     @possible_takes << board[id_y + 1][id_x + 1] unless id_y + 1 > 8 || id_x + 1 > 8
   end
 
-  def in_neighbouring_column?(start_coordinate, end_coordinate)
-    start_x = start_coordinate[:id_x]
-    end_x = end_coordinate[:id_x]
+  def in_neighbouring_column?(start_x:, end_x:)
     return true if end_x == start_x + 1 || end_x == start_x - 1
 
     false
   end
 
-  def valid_cross_take?(start_coordinate, end_coordinate)
+  def valid_cross_take?(start_coordinate:, end_coordinate:)
     start_y = start_coordinate[:id_y]
     end_y = end_coordinate[:id_y]
     return false unless enemy_on_tile?(end_coordinate)
-    return false unless in_neighbouring_column?(start_coordinate, end_coordinate)
+    return false unless in_neighbouring_column?(start_x: start_coordinate[:id_x], end_x: end_coordinate[:id_x])
 
     if @piece_color == 'white'
       return false unless end_y == start_y - 1
@@ -78,7 +77,7 @@ class Pawn < Piece
     true
   end
 
-  def valid_take?(start_coordinate, end_coordinate)
-    valid_cross_take?(start_coordinate, end_coordinate)
+  def valid_take?(start_coordinate:, end_coordinate:, **_)
+    valid_cross_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
   end
 end
