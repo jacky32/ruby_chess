@@ -19,14 +19,14 @@ class Piece
     @id_x = piece_position[:id_x]
   end
 
-  def move(start_coordinate, end_coordinate)
-    return unless valid_move?(start_coordinate, end_coordinate)
+  # def move(start_coordinate, end_coordinate)
+  #   return unless valid_move?(start_coordinate, end_coordinate)
 
-    add_to_piece_history(start_coordinate, end_coordinate)
-    refresh_piece_position(end_coordinate)
-    end_coordinate[:tile].content = start_coordinate[:value]
-    start_coordinate[:tile].remove_piece
-  end
+  #   add_to_piece_history(start_coordinate, end_coordinate)
+  #   refresh_piece_position(end_coordinate)
+  #   end_coordinate[:tile].content = start_coordinate[:value]
+  #   start_coordinate[:tile].remove_piece
+  # end
 
   def valid_move?(start_coordinate, end_coordinate)
     return false unless basic_move_checks_passed?(start_coordinate, end_coordinate)
@@ -39,11 +39,18 @@ class Piece
     false
   end
 
-  def take(start_coordinate, end_coordinate, board)
-    return unless valid_take?(start_coordinate, end_coordinate)
+  # def take(start_coordinate, end_coordinate, board)
+  #   return unless valid_take?(start_coordinate, end_coordinate)
 
-    add_to_graveyard(end_coordinate[:value], board)
-    move(start_coordinate, end_coordinate)
+  #   add_to_graveyard(end_coordinate[:value], board)
+  #   move(start_coordinate, end_coordinate)
+  # end
+
+  def valid_take?(_start_coordinate, end_coordinate)
+    generate_possible_takes
+    return false unless enemy_on_tile?(end_coordinate)
+
+    @possible_takes.include?(end_coordinate[:tile])
   end
 
   def add_to_piece_history(start_coordinate, end_coordinate)
@@ -56,10 +63,6 @@ class Piece
   def refresh_piece_position(coordinate)
     @id_y = coordinate[:id_y]
     @id_x = coordinate[:id_x]
-  end
-
-  def add_to_graveyard(piece, board)
-    board.graveyard << piece
   end
 
   def assign_visual(type)
@@ -105,12 +108,5 @@ class Piece
 
   def assign_board
     ObjectSpace.each_object(Board).to_a[0].board
-  end
-
-  def valid_take?(_start_coordinate, end_coordinate)
-    generate_possible_takes
-    return false unless enemy_on_tile?(end_coordinate)
-
-    @possible_takes.include?(end_coordinate[:tile])
   end
 end

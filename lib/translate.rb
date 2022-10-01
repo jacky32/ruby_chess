@@ -2,6 +2,7 @@
 
 # module for translating letter to numbers
 module Translate
+  # TODO: change to self. .. ?
   def translate_letter_to_number(letter)
     letters_in_numbers = {}
     ('a'..'h').each_with_index { |lett, numb| letters_in_numbers[lett] = numb + 1 }
