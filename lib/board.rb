@@ -14,9 +14,12 @@ class Board
     @graveyard = []
   end
 
-  def generate
+  def populate
     fill_with_pieces
-    show_board
+  end
+
+  def [](id_y, id_x)
+    @board[id_y][id_x].content
   end
 
   def show_board

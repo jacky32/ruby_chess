@@ -21,6 +21,6 @@ module Translate
     { id_x: id_x,
       id_y: id_y,
       tile: @board.board[id_y][id_x],
-      value: @board.board[id_y][id_x].content }
+      value: @board[id_y, id_x] }
   end
 end

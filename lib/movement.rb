@@ -22,7 +22,7 @@ module Movement
       1.upto(distance - 1) do |increment|
         id_y = assign_diagonal_id(option: value[:first_op], start_id: start_y, increment: increment)
         id_x = assign_diagonal_id(option: value[:second_op], start_id: start_x, increment: increment)
-        return true unless board[id_y][id_x].empty?
+        return true unless board[id_y, id_x].empty?
       end
     end
 
@@ -52,7 +52,7 @@ module Movement
     board_pieces = ObjectSpace.each_object(BoardPiece).to_a.select do |tile|
       filter_diagonal_selection(id_y: id_y, id_x: id_x, tile: tile, board: board)
     end
-    board_pieces.map { |tile| board[tile.id_y][tile.id_x] }
+    board_pieces.map { |tile| board[tile.id_y, tile.id_x] }
   end
 
   def filter_diagonal_selection(id_y:, id_x:, tile:, board:)
@@ -70,7 +70,7 @@ module Movement
       (-1..1).to_a.each do |increment_x|
         tid_y = @id_y + increment_y
         tid_x = @id_x + increment_x
-        generated_tiles << board[tid_y][tid_x] unless filter_one_around(id_y: tid_y, id_x: tid_x, board: board)
+        generated_tiles << board[tid_y, tid_x] unless filter_one_around(id_y: tid_y, id_x: tid_x, board: board)
       end
     end
     generated_tiles
@@ -79,7 +79,7 @@ module Movement
   def filter_one_around(id_y:, id_x:, board:)
     [id_y, id_x].any? { |a| a > 8 || a < 1 } ||
       (id_y == @id_y && id_x == @id_x) ||
-      friendly_on_tile?({ value: board[id_y][id_x].content })
+      friendly_on_tile?({ value: board[id_y, id_x].content })
   end
 
   # Rook movement
@@ -99,7 +99,7 @@ module Movement
   def generate_option_moves(id_y:, id_x:, rule_id:, rule_value:, board:)
     generated_moves = []
     loop do
-      tile = (id_y == @id_y ? board[id_y][rule_id] : board[rule_id][id_x])
+      tile = (id_y == @id_y ? board[id_y, rule_id] : board[rule_id, id_x])
       generated_moves << tile if move_checks_passed?(tile)
       break unless (rule_value > 0 ? (rule_id < 9) : (rule_id > 0)) && tile.empty?
 

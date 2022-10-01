@@ -22,7 +22,8 @@ class Game
     # return load if decision == 'load'
 
     generate_players
-    @board.generate
+    @board.populate
+    @board.show_board
     game_loop
   end
 
