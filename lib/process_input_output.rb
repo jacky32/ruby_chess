@@ -42,6 +42,15 @@ module ProcessInputOutput
     true
   end
 
+  # TODO: Fix colors
+  def show_player_turn_message
+    if @current_player == @white_player
+      puts "\e[97m#{@white_player.name}'s\e[0m turn!"
+    else
+      puts "\e[30m#{@black_player.name}'s\e[0m turn!"
+    end
+  end
+
   # TODO: print dead pieces on the side of the board
   def show_graveyard
     @board.graveyard.each_with_index { |dead, index| puts "#{index + 1}. #{dead[1]} #{dead[0]}" }

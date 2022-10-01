@@ -48,15 +48,6 @@ class Game
     @current_player = @current_player == @white_player ? @black_player : @white_player
   end
 
-  # TODO: Fix colors
-  def show_player_turn_message
-    if @current_player == @white_player
-      puts "\e[97m#{@white_player.name}'s\e[0m turn!"
-    else
-      puts "\e[30m#{@black_player.name}'s\e[0m turn!"
-    end
-  end
-
   def conditions_met?() end
 
   def generate_players
