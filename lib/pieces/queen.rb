@@ -12,10 +12,10 @@ class Queen < Piece
     assign_visual("\u265B")
   end
 
-  def generate_all
-    @possible_moves = generate_one_around
-    @possible_moves << generate_horizontal_and_vertical_moves
-    @possible_moves << generate_diagonal_moves
+  def generate_all(board:)
+    @possible_moves = generate_one_around(board: board)
+    @possible_moves << generate_horizontal_and_vertical_moves(board: board)
+    @possible_moves << generate_diagonal_moves(board: board)
     @possible_moves.flatten!.uniq!
     @possible_takes = @possible_moves
   end

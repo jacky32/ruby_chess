@@ -18,42 +18,39 @@ class Pawn < Piece
     true
   end
 
-  def generate_possible_moves
-    board = assign_board
-
+  def generate_possible_moves(board:)
     if @piece_color == 'white'
-      generate_white_moves(board)
+      generate_white_moves(board: board)
     else
-      generate_black_moves(board)
+      generate_black_moves(board: board)
     end
   end
 
-  def generate_white_moves(board)
+  def generate_white_moves(board:)
     @possible_moves << board[@id_y - 1][@id_x]
     @possible_moves << board[@id_y - 2][@id_x] if @piece_moves.empty?
   end
 
-  def generate_black_moves(board)
+  def generate_black_moves(board:)
     @possible_moves << board[@id_y + 1][@id_x]
     @possible_moves << board[@id_y + 2][@id_x] if @piece_moves.empty?
   end
 
-  def generate_possible_takes(id_y = @id_y, id_x = @id_x)
-    board = assign_board
+  def generate_possible_takes(board:, id_y: @id_y, id_x: @id_x)
     @possible_takes = []
     if @piece_color == 'white'
-      generate_white_takes(id_y, id_x, board)
+      generate_white_takes(id_y: id_y, id_x: id_x, board: board)
     else
-      generate_black_takes(id_y, id_x, board)
+      generate_black_takes(id_y: id_y, id_x: id_x, board: board)
     end
   end
 
-  def generate_white_takes(id_y, id_x, board)
+  def generate_white_takes(id_y:, id_x:, board:)
     @possible_takes << board[id_y - 1][id_x - 1] unless id_y - 1 < 1 || id_x - 1 < 1
     @possible_takes << board[id_y - 1][id_x + 1] unless id_y - 1 < 1 || id_x + 1 > 8
   end
 
-  def generate_black_takes(id_y, id_x, board)
+  def generate_black_takes(id_y:, id_x:, board:)
     @possible_takes << board[id_y + 1][id_x - 1] unless id_y + 1 > 8 || id_x - 1 < 1
     @possible_takes << board[id_y + 1][id_x + 1] unless id_y + 1 > 8 || id_x + 1 > 8
   end

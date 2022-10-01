@@ -19,35 +19,19 @@ class Piece
     @id_x = piece_position[:id_x]
   end
 
-  # def move(start_coordinate, end_coordinate)
-  #   return unless valid_move?(start_coordinate, end_coordinate)
-
-  #   add_to_piece_history(start_coordinate, end_coordinate)
-  #   refresh_piece_position(end_coordinate)
-  #   end_coordinate[:tile].content = start_coordinate[:value]
-  #   start_coordinate[:tile].remove_piece
-  # end
-
-  def valid_move?(start_coordinate, end_coordinate)
+  def valid_move?(start_coordinate:, end_coordinate:, board:)
     return false unless basic_move_checks_passed?(start_coordinate, end_coordinate)
     return false unless optional_move_checks_passed?(start_coordinate, end_coordinate)
 
-    generate_possible_moves
+    generate_possible_moves(board: board)
 
     return true if @possible_moves.include?(end_coordinate[:tile])
 
     false
   end
 
-  # def take(start_coordinate, end_coordinate, board)
-  #   return unless valid_take?(start_coordinate, end_coordinate)
-
-  #   add_to_graveyard(end_coordinate[:value], board)
-  #   move(start_coordinate, end_coordinate)
-  # end
-
-  def valid_take?(_start_coordinate, end_coordinate)
-    generate_possible_takes
+  def valid_take?(end_coordinate:, board:)
+    generate_possible_takes(board: board)
     return false unless enemy_on_tile?(end_coordinate)
 
     @possible_takes.include?(end_coordinate[:tile])

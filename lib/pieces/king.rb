@@ -12,24 +12,27 @@ class King < Piece
     assign_visual("\u265A")
   end
 
-  def optional_move_checks_passed?(_start_coordinate, end_coordinate)
-    return false if possible_check?(end_coordinate)
+  def optional_move_checks_passed?(_start_coordinate, _end_coordinate)
+    # TODO: move to game?
+    # return false if possible_check?(coordinate: end_coordinate, board: board)
 
     true
   end
 
-  def generate_all
-    @possible_moves = generate_one_around
+  def generate_all(board:)
+    @possible_moves = generate_one_around(board: board)
     @possible_takes = @possible_moves
   end
 
   alias generate_possible_moves generate_all
   alias generate_possible_takes generate_all
 
-  def possible_check?(coordinate)
+  # TODO: control from game?
+  # currently disabled due to board
+  def possible_check?(coordinate:, board:)
     pieces = assign_pieces
     pieces.any? do |piece|
-      piece.generate_possible_takes
+      piece.generate_possible_takes(board: board)
       takes = piece.possible_takes
       takes.any? do |take|
         take.id_y == coordinate[:id_y] && take.id_x == coordinate[:id_x]

@@ -12,8 +12,8 @@ class Bishop < Piece
     assign_visual("\u265D")
   end
 
-  def generate_all
-    @possible_moves = generate_diagonal_moves
+  def generate_all(board:)
+    @possible_moves = generate_diagonal_moves(board: board)
     @possible_takes = @possible_moves
   end
 

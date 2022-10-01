@@ -11,14 +11,14 @@ class Knight < Piece
     assign_visual("\u265E")
   end
 
-  def generate_all
+  def generate_all(board:)
     @possible_moves = []
 
     # generates vertical moves
-    generate_knight_moves(@id_y + 2, @id_y - 2, @id_x + 1, @id_x - 1)
+    generate_knight_moves(@id_y + 2, @id_y - 2, @id_x + 1, @id_x - 1, board)
 
     # generates horizontal moves
-    generate_knight_moves(@id_y + 1, @id_y - 1, @id_x + 2, @id_x - 2)
+    generate_knight_moves(@id_y + 1, @id_y - 1, @id_x + 2, @id_x - 2, board)
 
     @possible_takes = @possible_moves
   end
@@ -26,7 +26,7 @@ class Knight < Piece
   alias generate_possible_moves generate_all
   alias generate_possible_takes generate_all
 
-  def generate_knight_moves(tid_y_plus, tid_y_minus, tid_x_plus, tid_x_minus, board = assign_board)
+  def generate_knight_moves(tid_y_plus, tid_y_minus, tid_x_plus, tid_x_minus, board)
     if tid_y_minus > 0
       @possible_moves << board[tid_y_minus][tid_x_plus] unless tid_x_minus < 1
       @possible_moves << board[tid_y_minus][tid_x_minus] unless tid_x_plus > 8

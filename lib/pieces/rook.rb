@@ -16,8 +16,8 @@ class Rook < Piece
     true # True or add checks
   end
 
-  def generate_all
-    @possible_moves = generate_horizontal_and_vertical_moves
+  def generate_all(board:)
+    @possible_moves = generate_horizontal_and_vertical_moves(board: board)
     @possible_takes = @possible_moves
   end
 

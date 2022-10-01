@@ -55,30 +55,14 @@ class Game
     @black_player = Player.new('black')
   end
 
-  # def check_input_move(start_coordinate, end_coordinate)
-  #   start_piece = start_coordinate[:value]
-
-  #   return invalid_input if start_piece.nil?
-
-  #   # TODO: move logic to pieces
-  #   if start_piece.valid_move?(start_coordinate, end_coordinate)
-  #     move_piece(start_coordinate, end_coordinate)
-  #   elsif start_piece.valid_take?(start_coordinate, end_coordinate)
-  #     take_piece(start_coordinate, end_coordinate, @board)
-  #   else
-  #     puts 'Invalid move'
-  #   end
-  # end
-
   def decide_piece_move(start_coordinate, end_coordinate)
     start_piece = start_coordinate[:value]
 
     return invalid_input if start_piece.nil?
 
-    # TODO: move logic to pieces
-    if start_piece.valid_move?(start_coordinate, end_coordinate)
+    if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board.board)
       move_piece(start_coordinate, end_coordinate)
-    elsif start_piece.valid_take?(start_coordinate, end_coordinate)
+    elsif start_piece.valid_take?(end_coordinate: end_coordinate, board: @board.board)
       take_piece(start_coordinate, end_coordinate)
     else
       puts 'Invalid move'
