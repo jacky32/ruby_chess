@@ -49,6 +49,8 @@ class Piece
     @id_x = coordinate[:id_x]
   end
 
+  private
+
   def assign_visual(type)
     @visual = if @piece_color == 'black'
                 "\e[30m #{type} \e[0m"
