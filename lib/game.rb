@@ -89,5 +89,3 @@ class Game
     @board.graveyard << piece
   end
 end
-
-Game.new
