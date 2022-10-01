@@ -23,7 +23,6 @@ describe Pawn do
         before(:each) do
           @game = Game.new
           @board = @game.board.board
-          @bb = @game.board
           @start_id_y = 7
           @start_id_x = 2
           @pawn = @board[@start_id_y][@start_id_x].generate_piece('pawn', 'white', { 'id_y': @start_id_y, 'id_x': @start_id_x })
@@ -120,6 +119,23 @@ describe Pawn do
           @game.decide_piece_move(end_coordinate, final_coordinate)
           expect(@board[final_id_y][final_id_x].content).not_to be(@pawn)
           expect(@board[end_id_y][end_id_x].content).to be(@pawn)
+        end
+
+        it 'takes black pawn at c3' do
+          enemy_id_y = 6
+          enemy_id_x = 3
+          @black_pawn = @board[enemy_id_y][enemy_id_x].generate_piece('pawn', 'black', { 'id_y': enemy_id_y, 'id_x': enemy_id_x })
+
+          enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
+
+          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+
+          enemy_tile = @board[enemy_id_y][enemy_id_x].content
+          starting_tile = @board[@start_id_y][@start_id_x].content
+
+          expect(enemy_tile).to be(@pawn)
+          expect(enemy_tile).not_to be(@black_pawn)
+          expect(starting_tile).not_to be(@pawn)
         end
       end
     end
