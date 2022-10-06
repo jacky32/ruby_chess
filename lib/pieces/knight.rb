@@ -41,20 +41,6 @@ class Knight < Piece
     @possible_moves << board[id_y_plus][id_x_minus] if id_x_minus > 0
   end
 
-  # def valid_vertical?(start_y, start_x, end_y, end_x)
-  #   return true if end_y == start_y + 2 && (end_x == start_x + 1 || end_x == start_x - 1)
-  #   return true if end_y == start_y - 2 && (end_x == start_x + 1 || end_x == start_x - 1)
-
-  #   false
-  # end
-
-  # def valid_horizontal?(start_y, start_x, end_y, end_x)
-  #   return true if end_y == start_y + 1 && (end_x == start_x + 2 || end_x == start_x - 2)
-  #   return true if end_y == start_y - 1 && (end_x == start_x + 2 || end_x == start_x - 2)
-
-  #   false
-  # end
-
   def optional_move_checks_passed?(_start_coordinate, _end_coordinate)
     true # True or add checks
   end
