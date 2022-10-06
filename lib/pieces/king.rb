@@ -27,6 +27,7 @@ class King < Piece
   alias generate_possible_moves generate_all
   alias generate_possible_takes generate_all
 
+  # TODO: Add castling
   # TODO: control from game?
   # currently disabled due to board
   def possible_check?(coordinate:, board:)
