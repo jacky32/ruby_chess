@@ -12,9 +12,7 @@ class Rook < Piece
     assign_visual("\u265C")
   end
 
-  def optional_move_checks_passed?(_start_coordinate, _end_coordinate)
-    true # True or add checks
-  end
+  private
 
   def generate_all(board:)
     @possible_moves = generate_horizontal_and_vertical_moves(board: board)
@@ -23,4 +21,8 @@ class Rook < Piece
 
   alias generate_possible_moves generate_all
   alias generate_possible_takes generate_all
+
+  def optional_move_checks_passed?(_start_coordinate, _end_coordinate)
+    true # True or add checks
+  end
 end
