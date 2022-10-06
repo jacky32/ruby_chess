@@ -2,6 +2,7 @@
 
 # Module for talking with players and processing inputs
 module ProcessInputOutput
+  # TODO: Move all input/output to this module
   def process_input
     input = gets.chomp
     return check_single_word_input(input) unless input.include?(' ')
@@ -16,14 +17,44 @@ module ProcessInputOutput
     { start: start_coordinate, end: end_coordinate }
   end
 
+  # TODO: Make use of this method
+  def clear_board
+    puts `clear`
+  end
+
   def check_single_word_input(input)
     case input
     when 'save' then save
     when 'graveyard' then show_graveyard
+    when 'resign' then resign
+    when 'draw' then offer_draw
+    when 'help' then show_commands
     else
       invalid_input
     end
   end
+
+  def show_commands
+    puts ''
+    puts 'You can use the following commands:'
+    puts 'help - lists all commands'
+    puts 'save - saves the game'
+    puts 'draw - offers a draw'
+    puts 'resign - resigns'
+    puts 'graveyard - lists the dead pieces' # TODO: Maintain
+    puts ''
+    puts ''
+  end
+
+  def offer_draw
+    # TODO: Add functionality
+  end
+
+  def resign
+    # TODO: Add functionality
+  end
+
+  # TODO: List all past moves on the side of the board?
 
   def check_input_format(input_array)
     # check whether the input has 2 elements
