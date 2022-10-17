@@ -33,9 +33,7 @@ class Game
   def game_loop
     @current_player = @white_player
     loop do
-      clear_board
-      show_board
-      show_player_turn_message
+      show_gameloop
       coordinates = process_input
       decide_piece_move(start_coordinate: coordinates[:start], end_coordinate: coordinates[:end])
       break if conditions_met?
@@ -62,11 +60,11 @@ class Game
 
     if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: board)
       move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
-    elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate,
-                                  board: board)
+    elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: board)
       take_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
     else
       show_invalid_move(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+      process_input
     end
   end
 

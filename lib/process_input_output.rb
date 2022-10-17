@@ -77,6 +77,12 @@ module ProcessInputOutput
     true
   end
 
+  def show_gameloop
+    clear_board
+    show_board
+    show_player_turn_message
+  end
+
   # TODO: Fix colors
   def show_player_turn_message
     if @current_player == @white_player
