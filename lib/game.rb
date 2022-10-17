@@ -13,6 +13,7 @@ class Game
   include Translate
 
   def initialize
+    clear_board
     @board = Board.new
   end
 
@@ -23,7 +24,7 @@ class Game
 
     generate_players
     @board.populate
-    @board.show_board
+    show_board
     game_loop
   end
 
@@ -34,10 +35,11 @@ class Game
   def game_loop
     @current_player = @white_player
     loop do
+      clear_board
+      show_board
       show_player_turn_message
       coordinates = process_input
       decide_piece_move(coordinates[:start], coordinates[:end])
-      @board.show_board
       break if conditions_met?
 
       switch_current_player

@@ -19,7 +19,11 @@ module ProcessInputOutput
 
   # TODO: Make use of this method
   def clear_board
-    puts `clear`
+    puts "\e[H\e[2J"
+  end
+
+  def show_board
+    @board.show_board
   end
 
   def check_single_word_input(input)
