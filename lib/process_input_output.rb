@@ -91,6 +91,10 @@ module ProcessInputOutput
     @board.graveyard.each_with_index { |dead, index| puts "#{index + 1}. #{dead[1]} #{dead[0]}" }
   end
 
+  def show_invalid_move(start_coordinate:, end_coordinate:)
+    puts "Invalid move Y:#{start_coordinate[:id_y]} X:#{start_coordinate[:id_x]} -> Y:#{end_coordinate[:id_y]} X:#{end_coordinate[:id_x]} "
+  end
+
   def invalid_input
     puts 'Invalid input, try c1 c2'
     process_input

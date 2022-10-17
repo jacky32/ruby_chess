@@ -7,8 +7,6 @@ require_relative 'process_input_output'
 
 # main class for the game
 class Game
-  attr_accessor(:board, :white_player, :black_player)
-
   include ProcessInputOutput
   include Translate
 
@@ -39,7 +37,7 @@ class Game
       show_board
       show_player_turn_message
       coordinates = process_input
-      decide_piece_move(coordinates[:start], coordinates[:end])
+      decide_piece_move(start_coordinate: coordinates[:start], end_coordinate: coordinates[:end])
       break if conditions_met?
 
       switch_current_player
@@ -57,22 +55,22 @@ class Game
     @black_player = Player.new('black')
   end
 
-  def decide_piece_move(start_coordinate, end_coordinate)
+  def decide_piece_move(start_coordinate:, end_coordinate:)
     start_piece = start_coordinate[:value]
 
     return invalid_input if start_piece.nil?
 
-    if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board.board)
-      move_piece(start_coordinate, end_coordinate)
+    if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: board)
+      move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
     elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate,
-                                  board: @board.board)
-      take_piece(start_coordinate, end_coordinate)
+                                  board: board)
+      take_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
     else
-      puts "Invalid move Y:#{start_coordinate[:id_y]} X:#{start_coordinate[:id_x]} -> Y:#{end_coordinate[:id_y]} X:#{end_coordinate[:id_x]} "
+      show_invalid_move(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
     end
   end
 
-  def move_piece(start_coordinate, end_coordinate)
+  def move_piece(start_coordinate:, end_coordinate:)
     piece = start_coordinate[:value]
     piece.add_to_piece_history(start_coordinate, end_coordinate)
     piece.refresh_piece_position(end_coordinate)
@@ -81,14 +79,20 @@ class Game
     start_coordinate[:tile].remove_piece
   end
 
-  def take_piece(start_coordinate, end_coordinate)
+  def take_piece(start_coordinate:, end_coordinate:)
     taken_piece = end_coordinate[:value]
-    add_piece_to_graveyard(taken_piece)
+    add_piece_to_graveyard(taken_piece: taken_piece)
 
-    move_piece(start_coordinate, end_coordinate)
+    move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
   end
 
-  def add_piece_to_graveyard(piece)
-    @board.graveyard << piece
+  def add_piece_to_graveyard(taken_piece:)
+    @board.graveyard << taken_piece
+  end
+
+  private
+
+  def board
+    @board.board
   end
 end
