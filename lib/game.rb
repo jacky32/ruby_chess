@@ -61,14 +61,12 @@ class Game
   def decide_piece_move(start_coordinate:, end_coordinate:)
     start_piece = start_coordinate[:value]
 
-    return invalid_input if start_piece.nil?
-
     if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
       move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
     elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
       take_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
     else
-      show_invalid_move(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+      show_invalid_input(error_code: 5, start_coordinate: start_coordinate, end_coordinate: end_coordinate)
       return false
     end
     true

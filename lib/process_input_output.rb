@@ -8,11 +8,13 @@ module ProcessInputOutput
     return check_single_word_input(input) unless input.include?(' ')
 
     input_array = input.split(' ')
-    return invalid_input unless check_input_format(input_array)
+    return show_invalid_input(error_code: 9) unless check_input_format(input_array)
 
     start_coordinate = coordinate_to_hash(input_array[0].split(''))
     end_coordinate = coordinate_to_hash(input_array[1].split(''))
-    return invalid_input unless check_input_coordinates(start_coordinate, end_coordinate)
+    return show_invalid_input(error_code: 2) unless check_input_coordinates(start_coordinate, end_coordinate)
+    return show_invalid_input(error_code: 1) unless check_valid_start_piece(start_coordinate: start_coordinate)
+    return show_invalid_input(error_code: 0) unless check_player(start_coordinate: start_coordinate)
 
     { start: start_coordinate, end: end_coordinate }
   end
@@ -26,6 +28,14 @@ module ProcessInputOutput
     @board.show_board
   end
 
+  def check_valid_start_piece(start_coordinate:)
+    !start_coordinate[:value].nil?
+  end
+
+  def check_player(start_coordinate:, current_player: @current_player)
+    start_coordinate[:value].piece_color == current_player.color
+  end
+
   def check_single_word_input(input)
     case input
     when 'save' then save
@@ -34,7 +44,7 @@ module ProcessInputOutput
     when 'draw' then offer_draw
     when 'help' then show_commands
     else
-      invalid_input
+      show_invalid_input(error_code: 9)
     end
   end
 
@@ -97,12 +107,16 @@ module ProcessInputOutput
     @board.graveyard.each_with_index { |dead, index| puts "#{index + 1}. #{dead[1]} #{dead[0]}" }
   end
 
-  def show_invalid_move(start_coordinate:, end_coordinate:)
-    puts "Invalid move Y:#{start_coordinate[:id_y]} X:#{start_coordinate[:id_x]} -> Y:#{end_coordinate[:id_y]} X:#{end_coordinate[:id_x]} "
-  end
+  def show_invalid_input(error_code:, start_coordinate: nil, end_coordinate: nil)
+    case error_code
+    when 0 then puts "Not your piece! It's #{@current_player.name}'s move."
+    when 1 then puts 'You selected an empty board piece! Try again.'
+    when 2 then puts 'Selected input is out of the board boundaries! Try again.'
+    when 4 then puts 'Invalid input'
+    when 5 then puts "Invalid move! Selected piece cannot move from #{translate_number_to_letter(start_coordinate[:id_x])}#{9 - start_coordinate[:id_y]} to #{translate_number_to_letter(end_coordinate[:id_x])}#{9 - end_coordinate[:id_y]}"
+    else puts "Invalid input, try 'c1 c2' or 'help'"
+    end
 
-  def invalid_input
-    puts 'Invalid input, try c1 c2'
     process_input
   end
 end
