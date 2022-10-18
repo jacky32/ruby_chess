@@ -19,7 +19,7 @@ class Board
   end
 
   def [](id_y, id_x)
-    @board[id_y][id_x].content
+    @board[id_y][id_x]
   end
 
   def show_board

@@ -32,13 +32,13 @@ class Knight < Piece
 
   def generate_knight_moves(id_y_plus:, id_y_minus:, id_x_plus:, id_x_minus:, board:)
     if id_y_minus > 0
-      @possible_moves << board[id_y_minus][id_x_plus] if id_x_plus < 9
-      @possible_moves << board[id_y_minus][id_x_minus] if id_x_minus > 0
+      @possible_moves << board[id_y_minus, id_x_plus] if id_x_plus < 9
+      @possible_moves << board[id_y_minus, id_x_minus] if id_x_minus > 0
     end
     return unless id_y_plus < 9
 
-    @possible_moves << board[id_y_plus][id_x_plus] if id_x_plus < 9
-    @possible_moves << board[id_y_plus][id_x_minus] if id_x_minus > 0
+    @possible_moves << board[id_y_plus, id_x_plus] if id_x_plus < 9
+    @possible_moves << board[id_y_plus, id_x_minus] if id_x_minus > 0
   end
 
   def optional_move_checks_passed?(_start_coordinate, _end_coordinate)

@@ -3,8 +3,8 @@ module PieceSpecHelper
     {
       id_x: id_x,
       id_y: id_y,
-      tile: @board.board[id_y][id_x],
-      value: @board[id_y, id_x]
+      tile: @board[id_y, id_x],
+      value: @board[id_y, id_x].content
     }
   end
 

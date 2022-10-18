@@ -7,6 +7,8 @@ require_relative 'process_input_output'
 
 # main class for the game
 class Game
+  attr_reader :board
+
   include ProcessInputOutput
   include Translate
 
@@ -34,8 +36,11 @@ class Game
     @current_player = @white_player
     loop do
       show_gameloop
-      coordinates = process_input
-      decide_piece_move(start_coordinate: coordinates[:start], end_coordinate: coordinates[:end])
+      processed = false
+      while processed == false
+        coordinates = process_input
+        processed = decide_piece_move(start_coordinate: coordinates[:start], end_coordinate: coordinates[:end])
+      end
       break if conditions_met?
 
       switch_current_player
@@ -58,14 +63,15 @@ class Game
 
     return invalid_input if start_piece.nil?
 
-    if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: board)
+    if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
       move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
-    elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: board)
+    elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
       take_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
     else
       show_invalid_move(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
-      process_input
+      return false
     end
+    true
   end
 
   def move_piece(start_coordinate:, end_coordinate:)
@@ -86,11 +92,5 @@ class Game
 
   def add_piece_to_graveyard(taken_piece:)
     @board.graveyard << taken_piece
-  end
-
-  private
-
-  def board
-    @board.board
   end
 end

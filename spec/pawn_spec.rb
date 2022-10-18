@@ -24,13 +24,13 @@ describe Pawn do
           end_id_x = 2
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(ending_tile).to be(@pawn)
-          expect(starting_tile).not_to be(@pawn)
+          expect(ending_tile.content).to be(@pawn)
+          expect(starting_tile.content).not_to be(@pawn)
         end
 
         it "moves to b4 (2 in front)" do
@@ -38,13 +38,13 @@ describe Pawn do
           end_id_x = 2
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(ending_tile).to be(@pawn)
-          expect(starting_tile).not_to be(@pawn)
+          expect(ending_tile.content).to be(@pawn)
+          expect(starting_tile.content).not_to be(@pawn)
         end
 
         it "doesn't move to b1 (1 back)" do
@@ -52,13 +52,13 @@ describe Pawn do
           end_id_x = 2
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(ending_tile).not_to be(@pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(ending_tile.content).not_to be(@pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "doesn't move to a2 (1 to the left)" do
@@ -66,13 +66,13 @@ describe Pawn do
           end_id_x = 1
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(ending_tile).not_to be(@pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(ending_tile.content).not_to be(@pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "doesn't move to c2 (1 to the right)" do
@@ -80,13 +80,13 @@ describe Pawn do
           end_id_x = 3
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(ending_tile).not_to be(@pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(ending_tile.content).not_to be(@pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "moves to b3 (1 in front) but doesn't move to b5 (2 in front) afterwards" do
@@ -94,21 +94,21 @@ describe Pawn do
           end_id_x = 2
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
-          expect(ending_tile).to be(@pawn)
-          expect(starting_tile).not_to be(@pawn)
+          expect(ending_tile.content).to be(@pawn)
+          expect(starting_tile.content).not_to be(@pawn)
 
           final_id_y = 4
           final_id_x = 2
           final_coordinate = create_coordinate(final_id_y, final_id_x)
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(end_coordinate, final_coordinate)
-          expect(@board[final_id_y, final_id_x]).not_to be(@pawn)
-          expect(@board[end_id_y, end_id_x]).to be(@pawn)
+          @game.decide_piece_move(start_coordinate: end_coordinate, end_coordinate: final_coordinate)
+          expect(@board[final_id_y, final_id_x].content).not_to be(@pawn)
+          expect(@board[end_id_y, end_id_x].content).to be(@pawn)
         end
 
         it 'takes black pawn at c3' do
@@ -118,14 +118,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).to be(@pawn)
-          expect(enemy_tile).not_to be(black_pawn)
-          expect(starting_tile).not_to be(@pawn)
+          expect(enemy_tile.content).to be(@pawn)
+          expect(enemy_tile.content).not_to be(black_pawn)
+          expect(starting_tile.content).not_to be(@pawn)
         end
 
         it 'takes black pawn at a3' do
@@ -135,14 +135,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).to be(@pawn)
-          expect(enemy_tile).not_to be(black_pawn)
-          expect(starting_tile).not_to be(@pawn)
+          expect(enemy_tile.content).to be(@pawn)
+          expect(enemy_tile.content).not_to be(black_pawn)
+          expect(starting_tile.content).not_to be(@pawn)
         end
 
         it "doesn't take black pawn at e7" do
@@ -152,14 +152,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).not_to be(@pawn)
-          expect(enemy_tile).to be(black_pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(enemy_tile.content).not_to be(@pawn)
+          expect(enemy_tile.content).to be(black_pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "doesn't take black pawn at b3" do
@@ -169,14 +169,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).not_to be(@pawn)
-          expect(enemy_tile).to be(black_pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(enemy_tile.content).not_to be(@pawn)
+          expect(enemy_tile.content).to be(black_pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "doesn't take white pawn at a3" do
@@ -186,14 +186,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).not_to be(@pawn)
-          expect(enemy_tile).to be(white_pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(enemy_tile.content).not_to be(@pawn)
+          expect(enemy_tile.content).to be(white_pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "doesn't take white pawn at b3" do
@@ -203,14 +203,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).not_to be(@pawn)
-          expect(enemy_tile).to be(white_pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(enemy_tile.content).not_to be(@pawn)
+          expect(enemy_tile.content).to be(white_pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
       end
     end
@@ -230,13 +230,13 @@ describe Pawn do
           end_id_x = 2
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(ending_tile).to be(@pawn)
-          expect(starting_tile).not_to be(@pawn)
+          expect(ending_tile.content).to be(@pawn)
+          expect(starting_tile.content).not_to be(@pawn)
         end
 
         it "moves to b5 (2 in front)" do
@@ -244,13 +244,13 @@ describe Pawn do
           end_id_x = 2
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(ending_tile).to be(@pawn)
-          expect(starting_tile).not_to be(@pawn)
+          expect(ending_tile.content).to be(@pawn)
+          expect(starting_tile.content).not_to be(@pawn)
         end
 
         it "doesn't move to b8 (1 back)" do
@@ -258,13 +258,13 @@ describe Pawn do
           end_id_x = 2
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(ending_tile).not_to be(@pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(ending_tile.content).not_to be(@pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "doesn't move to a7 (1 to the left)" do
@@ -272,13 +272,13 @@ describe Pawn do
           end_id_x = 1
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(ending_tile).not_to be(@pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(ending_tile.content).not_to be(@pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "doesn't move to c7 (1 to the right)" do
@@ -286,13 +286,13 @@ describe Pawn do
           end_id_x = 3
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(ending_tile).not_to be(@pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(ending_tile.content).not_to be(@pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "moves to b6 (1 in front) but doesn't move to b4 (2 in front) afterwards" do
@@ -300,21 +300,21 @@ describe Pawn do
           end_id_x = 2
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(@start_coordinate, end_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: end_coordinate)
 
           ending_tile = @board[end_id_y, end_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
-          expect(ending_tile).to be(@pawn)
-          expect(starting_tile).not_to be(@pawn)
+          expect(ending_tile.content).to be(@pawn)
+          expect(starting_tile.content).not_to be(@pawn)
 
           final_id_y = 5
           final_id_x = 2
           final_coordinate = create_coordinate(final_id_y, final_id_x)
           end_coordinate = create_coordinate(end_id_y, end_id_x)
 
-          @game.decide_piece_move(end_coordinate, final_coordinate)
-          expect(@board[final_id_y, final_id_x]).not_to be(@pawn)
-          expect(@board[end_id_y, end_id_x]).to be(@pawn)
+          @game.decide_piece_move(start_coordinate: end_coordinate, end_coordinate: final_coordinate)
+          expect(@board[final_id_y, final_id_x].content).not_to be(@pawn)
+          expect(@board[end_id_y, end_id_x].content).to be(@pawn)
         end
 
         it 'takes white pawn at c6' do
@@ -324,14 +324,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).to be(@pawn)
-          expect(enemy_tile).not_to be(white_pawn)
-          expect(starting_tile).not_to be(@pawn)
+          expect(enemy_tile.content).to be(@pawn)
+          expect(enemy_tile.content).not_to be(white_pawn)
+          expect(starting_tile.content).not_to be(@pawn)
         end
 
         it 'takes white pawn at a6' do
@@ -341,14 +341,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).to be(@pawn)
-          expect(enemy_tile).not_to be(white_pawn)
-          expect(starting_tile).not_to be(@pawn)
+          expect(enemy_tile.content).to be(@pawn)
+          expect(enemy_tile.content).not_to be(white_pawn)
+          expect(starting_tile.content).not_to be(@pawn)
         end
 
         it "doesn't take white pawn at e7" do
@@ -358,14 +358,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).not_to be(@pawn)
-          expect(enemy_tile).to be(white_pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(enemy_tile.content).not_to be(@pawn)
+          expect(enemy_tile.content).to be(white_pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "doesn't take white pawn at b6" do
@@ -375,14 +375,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).not_to be(@pawn)
-          expect(enemy_tile).to be(white_pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(enemy_tile.content).not_to be(@pawn)
+          expect(enemy_tile.content).to be(white_pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "doesn't take black pawn at a6" do
@@ -392,14 +392,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).not_to be(@pawn)
-          expect(enemy_tile).to be(black_pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(enemy_tile.content).not_to be(@pawn)
+          expect(enemy_tile.content).to be(black_pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
 
         it "doesn't take black pawn at b6" do
@@ -409,14 +409,14 @@ describe Pawn do
 
           enemy_coordinate = create_coordinate(enemy_id_y, enemy_id_x)
 
-          @game.decide_piece_move(@start_coordinate, enemy_coordinate)
+          @game.decide_piece_move(start_coordinate: @start_coordinate, end_coordinate: enemy_coordinate)
 
           enemy_tile = @board[enemy_id_y, enemy_id_x]
           starting_tile = @board[@start_id_y, @start_id_x]
 
-          expect(enemy_tile).not_to be(@pawn)
-          expect(enemy_tile).to be(black_pawn)
-          expect(starting_tile).to be(@pawn)
+          expect(enemy_tile.content).not_to be(@pawn)
+          expect(enemy_tile.content).to be(black_pawn)
+          expect(starting_tile.content).to be(@pawn)
         end
       end
     end

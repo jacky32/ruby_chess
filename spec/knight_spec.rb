@@ -19,9 +19,9 @@ describe Knight do
         it 'generates all possible moves and takes' do
           expect(@knight.possible_moves).to be_empty
           
-          @knight.generate_all(board: board.board)
-          expect(@knight.possible_moves).to contain_exactly(board.board[6][1], board.board[6][3], board.board[7][4])
-          expect(@knight.possible_takes).to contain_exactly(board.board[6][1], board.board[6][3], board.board[7][4])
+          @knight.generate_all(board: board)
+          expect(@knight.possible_moves).to contain_exactly(board[6, 1], board[6, 3], board[7, 4])
+          expect(@knight.possible_takes).to contain_exactly(board[6, 1], board[6, 3], board[7, 4])
         end
       end
 
@@ -34,15 +34,15 @@ describe Knight do
         it 'generates all possible moves and takes' do
           expect(@knight.possible_moves).to be_empty
           
-          @knight.generate_all(board: board.board)
-          expect(@knight.possible_moves).to contain_exactly(board.board[3][3], board.board[3][5],
-                                                            board.board[4][2], board.board[4][6],
-                                                            board.board[6][2], board.board[6][6],
-                                                            board.board[7][3], board.board[7][5])
-          expect(@knight.possible_takes).to contain_exactly(board.board[3][3], board.board[3][5],
-                                                            board.board[4][2], board.board[4][6],
-                                                            board.board[6][2], board.board[6][6],
-                                                            board.board[7][3], board.board[7][5])
+          @knight.generate_all(board: board)
+          expect(@knight.possible_moves).to contain_exactly(board[3, 3], board[3, 5],
+                                                            board[4, 2], board[4, 6],
+                                                            board[6, 2], board[6, 6],
+                                                            board[7, 3], board[7, 5])
+          expect(@knight.possible_takes).to contain_exactly(board[3, 3], board[3, 5],
+                                                            board[4, 2], board[4, 6],
+                                                            board[6, 2], board[6, 6],
+                                                            board[7, 3], board[7, 5])
         end
       end
     end

@@ -68,18 +68,18 @@ module Movement
     generated_tiles = []
     (-1..1).to_a.each do |increment_y|
       (-1..1).to_a.each do |increment_x|
+        next if increment_y == 0 && increment_x == 0
+
         tid_y = @id_y + increment_y
         tid_x = @id_x + increment_x
-        generated_tiles << board[tid_y, tid_x] unless filter_one_around(id_y: tid_y, id_x: tid_x, board: board)
+        generated_tiles << board[tid_y, tid_x] unless filter_one_around(id_y: tid_y, id_x: tid_x)
       end
     end
     generated_tiles
   end
 
-  def filter_one_around(id_y:, id_x:, board:)
-    [id_y, id_x].any? { |a| a > 8 || a < 1 } ||
-      (id_y == @id_y && id_x == @id_x) ||
-      friendly_on_tile?({ value: board[id_y, id_x].content })
+  def filter_one_around(id_y:, id_x:)
+    [id_y, id_x].any? { |a| a > 8 || a < 1 }
   end
 
   # Rook movement

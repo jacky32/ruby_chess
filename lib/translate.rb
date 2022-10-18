@@ -20,7 +20,7 @@ module Translate
     id_y = 9 - coordinate[1].to_i
     { id_x: id_x,
       id_y: id_y,
-      tile: @board.board[id_y][id_x],
-      value: @board[id_y, id_x] }
+      tile: @board[id_y, id_x],
+      value: @board[id_y, id_x].content }
   end
 end
