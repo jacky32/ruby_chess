@@ -1,5 +1,7 @@
 # frozen_string_literal: false
 
+# rubocop:disable Metrics/ModuleLength
+
 # methods for shared movement
 module Movement
   # Bishop movement
@@ -80,6 +82,29 @@ module Movement
 
   def filter_one_around(id_y:, id_x:)
     [id_y, id_x].any? { |a| a > 8 || a < 1 }
+  end
+
+  def generate_castling_king(board:)
+    return unless @piece_moves.nil?
+
+    generated_tiles = []
+    generated_tiles << board[@id_y, @id_x - 2] if castling_king_conditions(board: board, id_x: 1)
+    generated_tiles << board[@id_y, @id_x + 2] if castling_king_conditions(board: board, id_x: 8)
+    generated_tiles
+  end
+
+  def castling_king_conditions(board:, id_x:)
+    return false unless board[@id_y, id_x].content.piece_moves.nil?
+
+    if id_x < @id_x
+      [1, 2, 3].each do |decrement|
+        return false unless board[@id_y, @id_x - decrement].content.nil?
+      end
+    else
+      [1, 2].each do |increment|
+        return false unless board[@id_y, @id_x + increment].content.nil?
+      end
+    end
   end
 
   # Rook movement

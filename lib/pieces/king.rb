@@ -22,6 +22,7 @@ class King < Piece
   def generate_all(board:)
     @possible_moves = generate_one_around(board: board)
     @possible_takes = @possible_moves
+    @possible_moves << generate_castling_king(board: board)
   end
 
   alias generate_possible_moves generate_all
