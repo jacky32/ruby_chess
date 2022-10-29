@@ -39,7 +39,10 @@ class Game
       processed = false
       while processed == false
         coordinates = process_input
-        processed = decide_piece_move(start_coordinate: coordinates[:start], end_coordinate: coordinates[:end])
+        unless coordinates == false
+          processed = decide_piece_move(start_coordinate: coordinates[:start],
+                                        end_coordinate: coordinates[:end])
+        end
       end
       break if conditions_met?
 

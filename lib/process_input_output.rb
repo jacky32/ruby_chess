@@ -117,6 +117,6 @@ module ProcessInputOutput
     else puts "Invalid input, try 'c1 c2' or 'help'"
     end
 
-    process_input
+    false
   end
 end
