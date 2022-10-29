@@ -85,16 +85,16 @@ module Movement
   end
 
   def generate_castling_king(board:)
-    return unless @piece_moves.nil?
+    return unless @piece_moves.empty?
 
     generated_tiles = []
-    generated_tiles << board[@id_y, @id_x - 2] if castling_king_conditions(board: board, id_x: 1)
-    generated_tiles << board[@id_y, @id_x + 2] if castling_king_conditions(board: board, id_x: 8)
+    generated_tiles << board[@id_y, 2] if castling_king_conditions(board: board, id_x: 1)
+    generated_tiles << board[@id_y, 7] if castling_king_conditions(board: board, id_x: 8)
     generated_tiles
   end
 
   def castling_king_conditions(board:, id_x:)
-    return false unless board[@id_y, id_x].content.piece_moves.nil?
+    return false unless board[@id_y, id_x].content.piece_moves.empty?
 
     if id_x < @id_x
       [1, 2, 3].each do |decrement|
@@ -133,6 +133,7 @@ module Movement
     generated_moves
   end
 
+  # Helper
   def move_checks_passed?(tile)
     within_board_boundaries?({ id_y: tile.id_y, id_x: tile.id_x })
   end

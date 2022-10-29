@@ -46,7 +46,7 @@ class Game
       end
       break if conditions_met?
 
-      switch_current_player
+      # switch_current_player
     end
   end
 
