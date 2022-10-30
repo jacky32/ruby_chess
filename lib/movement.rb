@@ -94,6 +94,7 @@ module Movement
   end
 
   def castling_king_conditions(board:, id_x:)
+    return false if board[@id_y, id_x].empty?
     return false unless board[@id_y, id_x].content.piece_moves.empty?
 
     if id_x < @id_x
@@ -131,6 +132,7 @@ module Movement
   end
 
   def castling_rook_conditions(board:, id_x:)
+    return false if board[@id_y, id_x].empty?
     return false unless board[@id_y, id_x].content.piece_moves.empty?
 
     if id_x < @id_x

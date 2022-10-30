@@ -96,6 +96,26 @@ class Game
     move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
   end
 
+  def castling?(start_coordinate:, end_coordinate:)
+    return false unless end_coordinate[:id_y] == start_coordinate[:id_y]
+
+    id_y = start_coordinate[:id_y]
+    if start_coordinate[:value].is_a?(Rook)
+      rook_piece_st = start_coordinate[:tile]
+      king_piece_st = board[id_y, 5]
+      return false unless [king_piece_st, rook_piece_st].all? { |tile| tile.content.piece_moves.empty? }
+      return true if [4, 6].include?(end_coordinate[:id_x])
+
+    elsif start_coordinate[:value].is_a?(King)
+      rook_piece_st = board[id_y, 1] if start_coordinate[:id_x] > end_coordinate[:id_x]
+      rook_piece_st = board[id_y, 8] if start_coordinate[:id_x] < end_coordinate[:id_x]
+      king_piece_st = start_coordinate[:tile]
+      return false unless [king_piece_st, rook_piece_st].all? { |tile| tile.content.piece_moves.empty? }
+      return true if [3, 7].include?(end_coordinate[:id_x])
+    end
+    false
+  end
+
   def move_castle(start_coordinate:, end_coordinate:)
     id_y = start_coordinate[:id_y]
     if start_coordinate[:value].is_a?(Rook)
@@ -114,35 +134,12 @@ class Game
       king_piece_end = end_coordinate[:tile]
     end
 
-    rook_piece_st.content.add_to_piece_history(piece: rook_piece_st.content, start_id_y: rook_piece_st.id_y, start_id_x: rook_piece_st.id_x,
-                                               end_id_y: rook_piece_end.id_y, end_id_x: rook_piece_end.id_x)
-    rook_piece_st.content.refresh_piece_position(id_x: rook_piece_end.id_x, id_y: rook_piece_end.id_y)
-    rook_piece_end.content = rook_piece_st.content
-    rook_piece_st.remove_piece
-
-    king_piece_st.content.add_to_piece_history(piece: king_piece_st.content, start_id_y: king_piece_st.id_y, start_id_x: king_piece_st.id_x,
-                                               end_id_y: king_piece_end.id_y, end_id_x: king_piece_end.id_x)
-    king_piece_st.content.refresh_piece_position(id_x: king_piece_end.id_x, id_y: king_piece_end.id_y)
-    king_piece_end.content = king_piece_st.content
-    king_piece_st.remove_piece
-
-    # piece.add_to_piece_history(start_id_y: start_coordinate[:id_y], start_id_x: start_coordinate[:id_x],
-    #                            end_id_y: end_coordinate[:id_y], end_id_x: end_coordinate[:id_x])
-    # piece.refresh_piece_position(id_x: end_coordinate[:id_x], id_y: end_coordinate[:id_y])
-
-    # end_coordinate[:tile].content = piece
-    # start_coordinate[:tile].remove_piece
-  end
-
-  def castling?(start_coordinate:, end_coordinate:)
-    return false unless end_coordinate[:id_y] == start_coordinate[:id_y]
-
-    if start_coordinate[:value].is_a?(Rook)
-      return true if end_coordinate[:id_x] == 4 || end_coordinate[:id_x] == 6
-    elsif start_coordinate[:value].is_a?(King)
-      return true if end_coordinate[:id_x] == 7 || end_coordinate[:id_x] == 3
-    else
-      false
+    [[rook_piece_st, rook_piece_end], [king_piece_st, king_piece_end]].each do |set|
+      set[0].content.add_to_piece_history(piece: set[0].content, start_id_y: set[0].id_y, start_id_x: set[0].id_x,
+                                          end_id_y: set[1].id_y, end_id_x: set[1].id_x)
+      set[0].content.refresh_piece_position(id_x: set[1].id_x, id_y: set[1].id_y)
+      set[1].content = set[0].content
+      set[0].remove_piece
     end
   end
 
