@@ -17,6 +17,8 @@ class Rook < Piece
   def generate_all(board:)
     @possible_moves = generate_horizontal_and_vertical_moves(board: board)
     @possible_takes = @possible_moves
+    @possible_moves << generate_castling_rook(board: board)
+    @possible_moves.flatten!
   end
 
   alias generate_possible_moves generate_all

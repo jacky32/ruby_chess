@@ -88,7 +88,7 @@ module Movement
     return unless @piece_moves.empty?
 
     generated_tiles = []
-    generated_tiles << board[@id_y, 2] if castling_king_conditions(board: board, id_x: 1)
+    generated_tiles << board[@id_y, 3] if castling_king_conditions(board: board, id_x: 1)
     generated_tiles << board[@id_y, 7] if castling_king_conditions(board: board, id_x: 8)
     generated_tiles
   end
@@ -119,6 +119,29 @@ module Movement
                                                rule_value: value[:rule_value], board: board)
     end
     generated_moves.flatten!
+  end
+
+  def generate_castling_rook(board:)
+    return unless @piece_moves.empty?
+
+    generated_tiles = []
+    generated_tiles << board[@id_y, 4] if castling_rook_conditions(board: board, id_x: 5)
+    generated_tiles << board[@id_y, 6] if castling_rook_conditions(board: board, id_x: 5)
+    generated_tiles
+  end
+
+  def castling_rook_conditions(board:, id_x:)
+    return false unless board[@id_y, id_x].content.piece_moves.empty?
+
+    if id_x < @id_x
+      [1, 2].each do |decrement|
+        return false unless board[@id_y, @id_x - decrement].content.nil?
+      end
+    else
+      [1, 2, 3].each do |increment|
+        return false unless board[@id_y, @id_x + increment].content.nil?
+      end
+    end
   end
 
   def generate_option_moves(id_y:, id_x:, rule_id:, rule_value:, board:)

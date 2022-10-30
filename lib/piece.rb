@@ -37,16 +37,16 @@ class Piece
     @possible_takes.include?(end_coordinate[:tile])
   end
 
-  def add_to_piece_history(start_coordinate, end_coordinate)
-    start_coordinate[:value].piece_moves << [
-      [start_coordinate[:id_y], translate_number_to_letter(start_coordinate[:id_x])],
-      [end_coordinate[:id_y], translate_number_to_letter(end_coordinate[:id_x])]
+  def add_to_piece_history(piece:, start_id_y:, start_id_x:, end_id_y:, end_id_x:)
+    piece.piece_moves << [
+      [start_id_y, translate_number_to_letter(start_id_x)],
+      [end_id_y, translate_number_to_letter(end_id_x)]
     ]
   end
 
-  def refresh_piece_position(coordinate)
-    @id_y = coordinate[:id_y]
-    @id_x = coordinate[:id_x]
+  def refresh_piece_position(id_y:, id_x:)
+    @id_y = id_y
+    @id_x = id_x
   end
 
   private
