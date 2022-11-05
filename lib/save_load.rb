@@ -47,13 +47,11 @@ module SaveLoad
   end
 
   def board_piece_as_json(board_piece)
-    {
-      board_piece: {
-        id_y: board_piece.id_y,
-        id_x: board_piece.id_x,
-        content: piece_as_json(board_piece.content)
-      }
-    }
+    { board_piece: {
+      id_y: board_piece.id_y,
+      id_x: board_piece.id_x,
+      content: piece_as_json(board_piece.content)
+    } }
   end
 
   def piece_as_json(piece)
@@ -69,10 +67,7 @@ module SaveLoad
   end
 
   def player_as_json(player)
-    {
-      name: player.name,
-      color: player.color
-    }
+    { name: player.name, color: player.color }
   end
 
   def load_game
@@ -82,9 +77,7 @@ module SaveLoad
     return false if save == false
 
     save_data = JSON.parse(File.read("saves/#{save}"))
-
     load_from_json(save_data)
-
     true
   end
 
@@ -97,7 +90,6 @@ module SaveLoad
   end
 
   def load_board_pieces_from_json(board)
-    p board
     board.each_value do |i|
       id_y = i['board_piece']['id_y'].to_i
       id_x = i['board_piece']['id_x'].to_i

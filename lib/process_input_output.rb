@@ -6,6 +6,7 @@ module ProcessInputOutput
     puts "Start a new game or load from save? (type \e[35mstart\e[0m or \e[35mload\e[0m)"
     decision = gets.chomp
     return load_game if decision == 'load'
+
     false
   end
 
