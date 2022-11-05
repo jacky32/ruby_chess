@@ -38,7 +38,7 @@ module ProcessInputOutput
 
   def check_single_word_input(input)
     case input
-    when 'save' then save
+    when 'save' then save_game
     when 'graveyard' then show_graveyard
     when 'resign' then resign
     when 'draw' then offer_draw

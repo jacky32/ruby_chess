@@ -5,6 +5,7 @@ require_relative 'board'
 require_relative 'player'
 require_relative 'translate'
 require_relative 'process_input_output'
+require_relative 'save_load'
 
 # main class for the game
 class Game
@@ -12,6 +13,7 @@ class Game
 
   include ProcessInputOutput
   include Translate
+  include SaveLoad
 
   def initialize
     clear_board
@@ -28,10 +30,6 @@ class Game
     show_board
     game_loop
   end
-
-  def save() end
-
-  def load() end
 
   def game_loop
     @current_player = @white_player
