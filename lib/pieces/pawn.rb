@@ -15,8 +15,6 @@ class Pawn < Piece
     valid_cross_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
   end
 
-  private
-
   def generate_possible_moves(board:)
     @possible_moves = []
     if @piece_color == 'white'
@@ -35,6 +33,8 @@ class Pawn < Piece
     end
   end
 
+  private
+  
   def optional_move_checks_passed?(start_coordinate, end_coordinate)
     # checks whether in the same line
     return false if start_coordinate[:id_x] != end_coordinate[:id_x]

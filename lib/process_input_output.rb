@@ -122,6 +122,7 @@ module ProcessInputOutput
     when 4 then puts 'Invalid input'
     when 5 then puts "Invalid move! Selected piece cannot move from #{translate_number_to_letter(start_coordinate[:id_x])}#{9 - start_coordinate[:id_y]} to #{translate_number_to_letter(end_coordinate[:id_x])}#{9 - end_coordinate[:id_y]}"
     when 6 then puts 'No saves exist! Starting new game'
+    when 7 then puts 'King would be in check! Choose a different move'
     else puts "Invalid input, try 'c1 c2' or 'help'"
     end
 

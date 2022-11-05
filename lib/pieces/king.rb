@@ -12,13 +12,6 @@ class King < Piece
     assign_visual("\u265A")
   end
 
-  def optional_move_checks_passed?(_start_coordinate, _end_coordinate)
-    # TODO: move to game?
-    # return false if possible_check?(coordinate: end_coordinate, board: board)
-
-    true
-  end
-
   def generate_all(board:)
     @possible_moves = generate_one_around(board: board)
     @possible_takes = @possible_moves
@@ -29,24 +22,9 @@ class King < Piece
   alias generate_possible_moves generate_all
   alias generate_possible_takes generate_all
 
-  # TODO: Add castling
-  # TODO: control from game?
-  # currently disabled due to board
-  def possible_check?(coordinate:, board:)
-    pieces = assign_pieces
-    pieces.any? do |piece|
-      piece.generate_possible_takes(board: board)
-      takes = piece.possible_takes
-      takes.any? do |take|
-        take.id_y == coordinate[:id_y] && take.id_x == coordinate[:id_x]
-      end
-    end
-  end
+  private
 
-  # selects pieces of opposite color that exist on the board
-  def assign_pieces
-    ObjectSpace.each_object(BoardPiece).to_a.map(&:content).reject do |piece|
-      piece.nil? || piece.piece_color == @piece_color
-    end
+  def optional_move_checks_passed?(_start_coordinate, _end_coordinate)
+    true
   end
 end
