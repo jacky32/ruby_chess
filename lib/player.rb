@@ -12,18 +12,15 @@ class Player
   def name_loop
     puts "Choose name for the #{@color} player"
     name = gets.chomp
-    loop do
-      name_valid = check_name_validity(name)
-      break if name_valid == true
-
-      puts name_valid
-      name = gets.chomp
-    end
+    name = gets.chomp until name_valid?(name)
     name
   end
 
-  def check_name_validity(name)
-    return 'Too long, try again' if name.size > 12
+  def name_valid?(name)
+    if name.size > 12
+      puts 'Too long, try again'
+      return false
+    end
 
     true
   end
