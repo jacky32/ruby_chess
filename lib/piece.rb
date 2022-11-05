@@ -39,8 +39,8 @@ class Piece
 
   def add_to_piece_history(piece:, start_id_y:, start_id_x:, end_id_y:, end_id_x:)
     piece.piece_moves << [
-      [start_id_y, translate_number_to_letter(start_id_x)],
-      [end_id_y, translate_number_to_letter(end_id_x)]
+      [start_id_y, Translate.number_to_letter(number: start_id_x)],
+      [end_id_y, Translate.number_to_letter(number: end_id_x)]
     ]
   end
 

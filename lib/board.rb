@@ -55,7 +55,7 @@ class Board
     # print empty corners
     print '   ' if [0, 9].include?(id_x)
     # print letters
-    print " #{translate_number_to_letter(id_x)} " if (1..8).to_a.include?(id_x)
+    print " #{Translate.number_to_letter(number: id_x)} " if (1..8).to_a.include?(id_x)
   end
 
   def print_helper_numbers(id_y)

@@ -17,8 +17,8 @@ module ProcessInputOutput
     input_array = input.split(' ')
     return show_invalid_input(error_code: 9) unless check_input_format(input_array)
 
-    start_coordinate = coordinate_to_hash(input_array[0].split(''))
-    end_coordinate = coordinate_to_hash(input_array[1].split(''))
+    start_coordinate = Translate.coordinate_to_hash(coordinate: input_array[0].split(''), board: @board)
+    end_coordinate = Translate.coordinate_to_hash(coordinate: input_array[1].split(''), board: @board)
     return show_invalid_input(error_code: 2) unless check_input_coordinates(start_coordinate, end_coordinate)
     return show_invalid_input(error_code: 1) unless check_valid_start_piece(start_coordinate: start_coordinate)
     return show_invalid_input(error_code: 0) unless check_player(start_coordinate: start_coordinate)
@@ -120,9 +120,10 @@ module ProcessInputOutput
     when 1 then puts 'You selected an empty board piece! Try again.'
     when 2 then puts 'Selected input is out of the board boundaries! Try again.'
     when 4 then puts 'Invalid input'
-    when 5 then puts "Invalid move! Selected piece cannot move from #{translate_number_to_letter(start_coordinate[:id_x])}#{9 - start_coordinate[:id_y]} to #{translate_number_to_letter(end_coordinate[:id_x])}#{9 - end_coordinate[:id_y]}"
+    when 5 then puts "Invalid move! Selected piece cannot move from #{Translate.number_to_letter(number: start_coordinate[:id_x])}#{9 - start_coordinate[:id_y]} to #{Translate.number_to_letter(number: end_coordinate[:id_x])}#{9 - end_coordinate[:id_y]}"
     when 6 then puts 'No saves exist! Starting new game'
     when 7 then puts 'King would be in check! Choose a different move'
+    when 8 then puts 'Your king is in check! Choose a different move'
     else puts "Invalid input, try 'c1 c2' or 'help'"
     end
 
