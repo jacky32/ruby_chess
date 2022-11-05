@@ -1,3 +1,4 @@
+# rubocop: disable Metrics/ClassLength
 # frozen_string_literal: false
 
 require_relative 'board'
@@ -64,6 +65,7 @@ class Game
   def decide_piece_move(start_coordinate:, end_coordinate:)
     start_piece = start_coordinate[:value]
 
+    # TODO: Check check
     if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
       move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
     elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
@@ -107,8 +109,11 @@ class Game
       return true if [4, 6].include?(end_coordinate[:id_x])
 
     elsif start_coordinate[:value].is_a?(King)
-      rook_piece_st = board[id_y, 1] if start_coordinate[:id_x] > end_coordinate[:id_x]
-      rook_piece_st = board[id_y, 8] if start_coordinate[:id_x] < end_coordinate[:id_x]
+      rook_piece_st = if start_coordinate[:id_x] > end_coordinate[:id_x]
+                        board[id_y, 1]
+                      else
+                        board[id_y, 8]
+                      end
       king_piece_st = start_coordinate[:tile]
       return false unless [king_piece_st, rook_piece_st].all? { |tile| tile.content.piece_moves.empty? }
       return true if [3, 7].include?(end_coordinate[:id_x])
@@ -118,22 +123,34 @@ class Game
 
   def move_castle(start_coordinate:, end_coordinate:)
     id_y = start_coordinate[:id_y]
+
+    # Assign new coordinations for pieces
     if start_coordinate[:value].is_a?(Rook)
       rook_piece_st = start_coordinate[:tile]
       rook_piece_end = end_coordinate[:tile]
       king_piece_st = board[id_y, 5]
 
-      king_piece_end = board[id_y, 3] if start_coordinate[:id_x] < end_coordinate[:id_x]
-      king_piece_end = board[id_y, 7] if start_coordinate[:id_x] > end_coordinate[:id_x]
-    elsif start_coordinate[:value].is_a?(King)
-      rook_piece_st = board[id_y, 1] if start_coordinate[:id_x] > end_coordinate[:id_x]
-      rook_piece_st = board[id_y, 8] if start_coordinate[:id_x] < end_coordinate[:id_x]
-      rook_piece_end = board[id_y, 4] if start_coordinate[:id_x] > end_coordinate[:id_x]
-      rook_piece_end = board[id_y, 6] if start_coordinate[:id_x] < end_coordinate[:id_x]
+      king_piece_end = if start_coordinate[:id_x] < end_coordinate[:id_x]
+                         board[id_y, 3]
+                       else
+                         board[id_y, 7]
+                       end
+    else # When king
+      rook_piece_st = if start_coordinate[:id_x] > end_coordinate[:id_x]
+                        board[id_y, 1]
+                      else
+                        board[id_y, 8]
+                      end
+      rook_piece_end = if start_coordinate[:id_x] > end_coordinate[:id_x]
+                         board[id_y, 4]
+                       else
+                         board[id_y, 6]
+                       end
       king_piece_st = start_coordinate[:tile]
       king_piece_end = end_coordinate[:tile]
     end
 
+    # Move both pieces
     [[rook_piece_st, rook_piece_end], [king_piece_st, king_piece_end]].each do |set|
       set[0].content.add_to_piece_history(piece: set[0].content, start_id_y: set[0].id_y, start_id_x: set[0].id_x,
                                           end_id_y: set[1].id_y, end_id_x: set[1].id_x)
