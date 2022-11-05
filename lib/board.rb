@@ -33,6 +33,18 @@ class Board
     end
   end
 
+  def all_pieces
+    pieces = []
+    @board.each_with_index do |row, id_y|
+      row.each_with_index do |_tile, id_x|
+        next if [0, 9].any?(id_x || id_y)
+
+        pieces << @board[id_y][id_x].content unless @board[id_y][id_x].content.nil?
+      end
+    end
+    pieces
+  end
+
   private
 
   def create_board
