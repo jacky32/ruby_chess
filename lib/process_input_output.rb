@@ -2,7 +2,13 @@
 
 # Module for talking with players and processing inputs
 module ProcessInputOutput
-  # TODO: Move all input/output to this module
+  def load?
+    puts "Start a new game or load from save? (type \e[35mstart\e[0m or \e[35mload\e[0m)"
+    decision = gets.chomp
+    return load_game if decision == 'load'
+    false
+  end
+
   def process_input
     input = gets.chomp
     return check_single_word_input(input) unless input.include?(' ')
@@ -114,6 +120,7 @@ module ProcessInputOutput
     when 2 then puts 'Selected input is out of the board boundaries! Try again.'
     when 4 then puts 'Invalid input'
     when 5 then puts "Invalid move! Selected piece cannot move from #{translate_number_to_letter(start_coordinate[:id_x])}#{9 - start_coordinate[:id_y]} to #{translate_number_to_letter(end_coordinate[:id_x])}#{9 - end_coordinate[:id_y]}"
+    when 6 then puts 'No saves exist! Starting new game'
     else puts "Invalid input, try 'c1 c2' or 'help'"
     end
 

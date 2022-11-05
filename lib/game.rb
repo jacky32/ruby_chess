@@ -21,13 +21,11 @@ class Game
   end
 
   def start
-    # puts "Start a new game or load from save? (type \e[35mstart\e[0m or \e[35mload\e[0m)"
-    # decision = gets.chomp
-    # return load if decision == 'load'
-
-    generate_players
-    @board.populate
-    show_board
+    unless load?
+      generate_players
+      @board.populate
+      show_board
+    end 
     game_loop
   end
 

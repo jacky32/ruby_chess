@@ -4,9 +4,9 @@
 class Player
   attr_accessor(:name, :color)
 
-  def initialize(color)
+  def initialize(color, name = nil)
     @color = color
-    @name = name_loop
+    @name = name.nil? ? name_loop : name # Goes into the name_loop with color loaded
   end
 
   def name_loop
