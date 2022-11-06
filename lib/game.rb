@@ -53,7 +53,12 @@ class Game
 
   def checkmate?; end
 
-  def king_in_check?; end
+  def king_in_check?
+    king = @board.all_pieces.select do |piece|
+      piece.instance_of?(King) && piece.piece_color == @current_player.color
+    end.first
+    possible_king_check?(coordinate: { id_y: king.id_y, id_x: king.id_x })
+  end
 
   def possible_king_check?(coordinate:, color: @current_player.color)
     @board.all_pieces.any? do |piece|
@@ -74,14 +79,17 @@ class Game
   def decide_piece_move(start_coordinate:, end_coordinate:)
     start_piece = start_coordinate[:value]
 
-    if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
-      if start_piece.instance_of?(King) && possible_king_check?(coordinate: end_coordinate)
-        return show_invalid_input(error_code: 7)
-      end
+    if start_piece.instance_of?(King) && possible_king_check?(coordinate: end_coordinate)
+      return show_invalid_input(error_code: 7)
+    end
 
+    # if king in check -> next move must remove the check condition
+    if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
       move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+      return undo_move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate) if king_in_check?
     elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
       take_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+      return undo_take_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate) if king_in_check?
     else
       return show_invalid_input(error_code: 5, start_coordinate: start_coordinate, end_coordinate: end_coordinate)
     end
@@ -102,11 +110,28 @@ class Game
     start_coordinate[:tile].remove_piece
   end
 
+  def undo_move_piece(start_coordinate:, end_coordinate:)
+    piece = end_coordinate[:tile].content
+    piece.remove_last_from_piece_history(piece: piece)
+    piece.refresh_piece_position(id_x: start_coordinate[:id_x], id_y: start_coordinate[:id_y])
+
+    start_coordinate[:tile].content = piece
+    end_coordinate[:tile].remove_piece
+    show_invalid_input(error_code: 9)
+  end
+
   def take_piece(start_coordinate:, end_coordinate:)
     taken_piece = end_coordinate[:value]
     add_piece_to_graveyard(taken_piece: taken_piece)
 
     move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+  end
+
+  def undo_take_piece(start_coordinate:, end_coordinate:)
+    taken_piece = restore_last_piece_from_graveyard
+    undo_move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+    end_coordinate[:tile].content = taken_piece
+    false # return false to stay in the same gameloop
   end
 
   def castling?(start_coordinate:, end_coordinate:)
@@ -173,5 +198,9 @@ class Game
 
   def add_piece_to_graveyard(taken_piece:)
     @board.graveyard << taken_piece
+  end
+
+  def restore_last_piece_from_graveyard
+    @board.graveyard.pop
   end
 end

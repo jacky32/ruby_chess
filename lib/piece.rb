@@ -44,6 +44,10 @@ class Piece
     ]
   end
 
+  def remove_last_from_piece_history(piece:)
+    piece.piece_moves.pop
+  end
+
   def refresh_piece_position(id_y:, id_x:)
     @id_y = id_y
     @id_x = id_x

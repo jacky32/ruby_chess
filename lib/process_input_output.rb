@@ -10,6 +10,7 @@ module ProcessInputOutput
     false
   end
 
+  # TODO: save_game crashes the app
   def process_input
     input = gets.chomp
     return check_single_word_input(input) unless input.include?(' ')
@@ -124,6 +125,7 @@ module ProcessInputOutput
     when 6 then puts 'No saves exist! Starting new game'
     when 7 then puts 'King would be in check! Choose a different move'
     when 8 then puts 'Your king is in check! Choose a different move'
+    when 9 then puts 'Your king would be in check! Choose a different move'
     else puts "Invalid input, try 'c1 c2' or 'help'"
     end
 
