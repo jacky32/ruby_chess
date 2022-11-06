@@ -50,8 +50,14 @@ module Movement
   end
 
   def generate_diagonal_moves(board:, id_y: @id_y, id_x: @id_x)
-    # TODO: Remove dependency on ObjectSpace
-    board_pieces = ObjectSpace.each_object(BoardPiece).to_a.select do |tile|
+    tiles = []
+    board.board.each_with_index do |row, id_y|
+      row.each_with_index do |_eest, id_x|
+        tiles << board[id_y, id_x]
+      end
+    end
+
+    board_pieces = tiles.select do |tile|
       filter_diagonal_selection(id_y: id_y, id_x: id_x, tile: tile, board: board)
     end
     board_pieces.map { |tile| board[tile.id_y, tile.id_x] }
