@@ -28,7 +28,7 @@ module ProcessInputOutput
   end
 
   def announce_check
-    puts "#{@current_player.name} has put your king in check!"
+    puts "#{@current_player.name} has put your \e[1mking in check!\e[0m"
   end
 
   def clear_board
@@ -110,9 +110,9 @@ module ProcessInputOutput
   # TODO: Fix colors
   def show_player_turn_message
     if @current_player == @white_player
-      puts "\e[97m#{@white_player.name}'s\e[0m turn!"
+      puts "\e[97m\e[47m\e[1m#{@white_player.name}'s turn!\e[0m"
     else
-      puts "\e[30m#{@black_player.name}'s\e[0m turn!"
+      puts "\e[30m\e[40m\e[1m#{@black_player.name}'s turn!\e[0m"
     end
   end
 
