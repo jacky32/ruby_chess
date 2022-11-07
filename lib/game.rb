@@ -18,10 +18,10 @@ class Game
 
   def initialize
     clear_board
-    @board = Board.new
   end
 
   def start
+    @board = Board.new
     unless load?
       generate_players
       @board.populate
@@ -40,6 +40,7 @@ class Game
       processed = false
       while processed == false
         coordinates = process_input
+        return new_game if coordinates == 'resign'
         unless coordinates == false
           processed = decide_piece_move(start_coordinate: coordinates[:start],
                                         end_coordinate: coordinates[:end])
@@ -54,11 +55,15 @@ class Game
     @current_player = @current_player == @white_player ? @black_player : @white_player
   end
 
+  def other_player
+    @current_player == @white_player ? @black_player : @white_player
+  end
+
   def checkmate?
     return false unless king_in_check?
     return false if any_possible_move?
 
-    puts 'checkmate!' # throws checkmate everytime king is in check
+    puts "Checkmate! #{other_player.name} has won!"
     true
   end
 

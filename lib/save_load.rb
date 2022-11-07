@@ -10,6 +10,7 @@ module SaveLoad
     File.open("saves/#{filename}.json", 'w') do |save_file|
       save_file.puts as_json
     end
+    false
   end
 
   def generate_filename

@@ -10,9 +10,8 @@ module ProcessInputOutput
     false
   end
 
-  # TODO: save_game crashes the app
   def process_input
-    input = gets.chomp
+    input = gets.chomp.downcase
     return show_invalid_input(error_code: 10) if input == ''
     return check_single_word_input(input) unless input.include?(' ')
 
@@ -65,23 +64,26 @@ module ProcessInputOutput
     puts ''
     puts 'You can use the following commands:'
     puts 'help - lists all commands'
-    puts 'save - saves the game'
-    puts 'draw - offers a draw'
+    puts 'save - saves the current game'
     puts 'resign - resigns'
-    puts 'graveyard - lists the dead pieces' # TODO: Maintain
+    puts 'graveyard - lists the dead pieces'
     puts ''
     puts ''
+    false
   end
 
-  def offer_draw
-    # TODO: Add functionality
+  def new_game
+    puts "Type 'yes' to start a new game."
+    input = gets.chomp.downcase
+    return unless input == 'yes'
+
+    start
   end
 
   def resign
-    # TODO: Add functionality
+    puts "#{@current_player.name} has resigned! #{other_player.name} has won!"
+    'resign'
   end
-
-  # TODO: List all past moves on the side of the board?
 
   def check_input_format(input_array)
     # check whether the input has 2 elements
@@ -115,9 +117,13 @@ module ProcessInputOutput
     end
   end
 
-  # TODO: print dead pieces on the side of the board
   def show_graveyard
-    @board.graveyard.each_with_index { |dead, index| puts "#{index + 1}. #{dead[1]} #{dead[0]}" }
+    if @board.graveyard.empty?
+      puts 'Graveyard is empty!'
+    else
+      @board.graveyard.each_with_index { |dead, index| puts "#{index + 1}. #{dead.piece_color}: #{dead.class}" }
+    end
+    false
   end
 
   def show_invalid_input(error_code:, start_coordinate: nil, end_coordinate: nil)
