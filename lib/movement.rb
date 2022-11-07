@@ -80,13 +80,15 @@ module Movement
 
         tid_y = @id_y + increment_y
         tid_x = @id_x + increment_x
-        generated_tiles << board[tid_y, tid_x] unless filter_one_around(id_y: tid_y, id_x: tid_x)
+        generated_tiles << board[tid_y, tid_x] unless filter_one_around(id_y: tid_y, id_x: tid_x, board: board)
       end
     end
     generated_tiles
   end
 
-  def filter_one_around(id_y:, id_x:)
+  def filter_one_around(id_y:, id_x:, board:)
+    return true unless board[id_y, id_x].empty? || board[id_y, id_x].content.piece_color != @piece_color
+
     [id_y, id_x].any? { |a| a > 8 || a < 1 }
   end
 

@@ -22,4 +22,11 @@ module Translate
       tile: board[id_y, id_x],
       value: board[id_y, id_x].content }
   end
+
+  def self.coordinate_to_hash_simple(id_y:, id_x:, board:)
+    { id_x: id_x,
+      id_y: id_y,
+      tile: board[id_y, id_x],
+      value: board[id_y, id_x].content }
+  end
 end

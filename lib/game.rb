@@ -6,6 +6,7 @@ require_relative 'player'
 require_relative 'translate'
 require_relative 'process_input_output'
 require_relative 'save_load'
+require 'pry-byebug'
 
 # main class for the game
 class Game
@@ -30,9 +31,12 @@ class Game
   end
 
   def game_loop
-    @current_player = @white_player
+    @current_player ||= @white_player
     loop do
       show_gameloop
+      break if checkmate?
+
+      announce_check if king_in_check?
       processed = false
       while processed == false
         coordinates = process_input
@@ -41,9 +45,8 @@ class Game
                                         end_coordinate: coordinates[:end])
         end
       end
-      break if checkmate?
 
-      # switch_current_player
+      switch_current_player
     end
   end
 
@@ -51,12 +54,47 @@ class Game
     @current_player = @current_player == @white_player ? @black_player : @white_player
   end
 
-  def checkmate?; end
+  def checkmate?
+    return false unless king_in_check?
+    return false if any_possible_move?
+
+    puts 'checkmate!' # throws checkmate everytime king is in check
+    true
+  end
+
+  def any_possible_move?
+    @board.all_pieces.each do |piece|
+      next if piece.piece_color != @current_player.color
+
+      piece.generate_possible_moves(board: @board)
+      piece.possible_moves.each do |move|
+        next if move.nil?
+
+        start_coordinate = Translate.coordinate_to_hash_simple(id_y: piece.id_y, id_x: piece.id_x, board: @board)
+        end_coordinate = Translate.coordinate_to_hash_simple(id_y: move.id_y, id_x: move.id_x, board: @board)
+        possible_move = false
+        if piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
+          move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+          possible_move = true unless king_in_check?
+
+          undo_move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+        elsif piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
+          take_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+          possible_move = true unless king_in_check?
+
+          undo_take_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+        end
+        return true if possible_move == true
+      end
+    end
+    false
+  end
 
   def king_in_check?
     king = @board.all_pieces.select do |piece|
       piece.instance_of?(King) && piece.piece_color == @current_player.color
     end.first
+    king.generate_possible_moves(board: @board)
     possible_king_check?(coordinate: { id_y: king.id_y, id_x: king.id_x })
   end
 
@@ -65,7 +103,10 @@ class Game
       next if piece.piece_color == color
 
       piece.generate_possible_takes(board: @board)
+
       piece.possible_takes.any? do |take|
+        next if take.nil?
+
         take.id_y == coordinate[:id_y] && take.id_x == coordinate[:id_x]
       end
     end
@@ -86,10 +127,16 @@ class Game
     # if king in check -> next move must remove the check condition
     if start_piece.valid_move?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
       move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
-      return undo_move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate) if king_in_check?
+      if king_in_check?
+        undo_move_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+        return show_invalid_input(error_code: 9)
+      end
     elsif start_piece.valid_take?(start_coordinate: start_coordinate, end_coordinate: end_coordinate, board: @board)
       take_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
-      return undo_take_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate) if king_in_check?
+      if king_in_check?
+        undo_take_piece(start_coordinate: start_coordinate, end_coordinate: end_coordinate)
+        return show_invalid_input(error_code: 9)
+      end
     else
       return show_invalid_input(error_code: 5, start_coordinate: start_coordinate, end_coordinate: end_coordinate)
     end
@@ -117,7 +164,6 @@ class Game
 
     start_coordinate[:tile].content = piece
     end_coordinate[:tile].remove_piece
-    show_invalid_input(error_code: 9)
   end
 
   def take_piece(start_coordinate:, end_coordinate:)
@@ -141,7 +187,7 @@ class Game
     if start_coordinate[:value].is_a?(Rook)
       rook_piece_st = start_coordinate[:tile]
       king_piece_st = board[id_y, 5]
-      return false unless [king_piece_st, rook_piece_st].all? { |tile| tile.content.piece_moves.empty? }
+      return false unless [king_piece_st, rook_piece_st].all? { |tile| !tile.empty? && tile.content.piece_moves.empty? }
       return true if [4, 6].include?(end_coordinate[:id_x])
 
     elsif start_coordinate[:value].is_a?(King)

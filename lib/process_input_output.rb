@@ -13,6 +13,7 @@ module ProcessInputOutput
   # TODO: save_game crashes the app
   def process_input
     input = gets.chomp
+    return show_invalid_input(error_code: 10) if input == ''
     return check_single_word_input(input) unless input.include?(' ')
 
     input_array = input.split(' ')
@@ -25,6 +26,10 @@ module ProcessInputOutput
     return show_invalid_input(error_code: 0) unless check_player(start_coordinate: start_coordinate)
 
     { start: start_coordinate, end: end_coordinate }
+  end
+
+  def announce_check
+    puts "#{@current_player.name} has put your king in check!"
   end
 
   # TODO: Make use of this method
@@ -126,6 +131,7 @@ module ProcessInputOutput
     when 7 then puts 'King would be in check! Choose a different move'
     when 8 then puts 'Your king is in check! Choose a different move'
     when 9 then puts 'Your king would be in check! Choose a different move'
+    when 10 then puts 'You must enter a coordinate! Try c1 c2'
     else puts "Invalid input, try 'c1 c2' or 'help'"
     end
 
