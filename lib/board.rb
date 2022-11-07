@@ -64,9 +64,9 @@ class Board
 
   def print_colors(tile)
     if tile.color == 'black'
-      print "\e[48;5;243m#{defined?(tile.content.visual) ? tile.content.visual : '   '}\e[0m"
+      print "\e[48;5;251m#{defined?(tile.content.visual) ? tile.content.visual : '   '}\e[0m"
     else
-      print "\e[48;5;249m#{defined?(tile.content.visual) ? tile.content.visual : '   '}\e[0m"
+      print "\e[48;5;255m#{defined?(tile.content.visual) ? tile.content.visual : '   '}\e[0m"
     end
   end
 

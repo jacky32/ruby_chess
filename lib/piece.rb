@@ -59,7 +59,7 @@ class Piece
     @visual = if @piece_color == 'black'
                 "\e[30m #{type} \e[0m"
               else
-                "\e[97m #{type} \e[0m"
+                "\e[38:5:5m #{type} \e[0m"
               end
   end
 

@@ -11,7 +11,7 @@ module ProcessInputOutput
   end
 
   def process_input
-    input = gets.chomp.downcase
+    input = gets.chomp
     return show_invalid_input(error_code: 10) if input == ''
     return check_single_word_input(input) unless input.include?(' ')
 
@@ -110,9 +110,9 @@ module ProcessInputOutput
   # TODO: Fix colors
   def show_player_turn_message
     if @current_player == @white_player
-      puts "\e[97m#{@white_player.name}'s\e[0m turn!"
+      puts "\e[38:5:5m#{@white_player.name}'s turn!\e[0m"
     else
-      puts "\e[30m#{@black_player.name}'s\e[0m turn!"
+      puts "\e[30m#{@black_player.name}'s turn!\e[0m"
     end
   end
 
