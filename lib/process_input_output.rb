@@ -31,7 +31,6 @@ module ProcessInputOutput
     puts "#{@current_player.name} has put your king in check!"
   end
 
-  # TODO: Make use of this method
   def clear_board
     puts "\e[H\e[2J"
   end
@@ -63,10 +62,10 @@ module ProcessInputOutput
   def show_commands
     puts ''
     puts 'You can use the following commands:'
-    puts 'help - lists all commands'
-    puts 'save - saves the current game'
-    puts 'resign - resigns'
-    puts 'graveyard - lists the dead pieces'
+    puts "'help' - lists all commands"
+    puts "'save' - saves the current game"
+    puts "'resign' - resigns"
+    puts "'graveyard' - lists the dead pieces"
     puts ''
     puts ''
     false
