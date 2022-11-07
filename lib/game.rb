@@ -6,7 +6,6 @@ require_relative 'player'
 require_relative 'translate'
 require_relative 'process_input_output'
 require_relative 'save_load'
-require 'pry-byebug'
 
 # main class for the game
 class Game
@@ -41,6 +40,7 @@ class Game
       while processed == false
         coordinates = process_input
         return new_game if coordinates == 'resign'
+
         unless coordinates == false
           processed = decide_piece_move(start_coordinate: coordinates[:start],
                                         end_coordinate: coordinates[:end])
