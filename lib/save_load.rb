@@ -85,6 +85,7 @@ module SaveLoad
     @board.graveyard = data['board']['graveyard']
     @white_player = Player.new('white', data['white_player']['name'])
     @black_player = Player.new('black', data['black_player']['name'])
+    @current_player = data['current_player']['color'] == 'white' ? @white_player : @black_player
 
     load_board_pieces_from_json(data['board']['board'])
   end
